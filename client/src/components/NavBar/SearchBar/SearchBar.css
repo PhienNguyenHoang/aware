@@ -1,0 +1,19 @@
+.searchBox-container {
+  position: relative;
+  width: 177px;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 5px;
+  color: #b7b7b7;
+  margin-bottom: 3px;
+}
+.searchBox {
+  border: solid 1px #b7b7b7;
+  border-radius: 100px;
+  padding: 5px ;    
+  width: 165px;
+}

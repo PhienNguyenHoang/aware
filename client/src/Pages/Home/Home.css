@@ -1,0 +1,9 @@
+.body {
+    height: 100vh;
+    background-color: greenyellow;
+}
+
+.footer {
+    height: 15vh;
+    background-color: hotpink;
+}

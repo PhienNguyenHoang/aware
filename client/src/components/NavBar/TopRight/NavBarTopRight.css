@@ -1,0 +1,7 @@
+.topRightContainer {
+    width: 300px;
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    right: 100px
+}
