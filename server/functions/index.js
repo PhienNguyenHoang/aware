@@ -2,9 +2,19 @@ const functions = require('firebase-functions');
 
 const app = require('express')();
 
-const { signup } = require('./handlers/user')
+const { signup, getAuthenticatedUser } = require('./handlers/user')
 
+const FirebaseAuth = require("./util/FirebaseAuth");
+
+const cors = require('cors');
+app.use(cors());
+
+
+
+//user
 app.post('/signup', signup);
+
+app.get('/user',FirebaseAuth,  getAuthenticatedUser);
 
 
 

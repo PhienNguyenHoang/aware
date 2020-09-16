@@ -19,8 +19,14 @@ const Register = () => {
   return (
     <div>
       <button onClick={handleOpenModal}>Register</button>
-      <Modal isOpen={modalIsOpen} onRequestClose={handleCloseModal} className="Modal">
-        <RegisterForm />
+      <Modal
+        isOpen={modalIsOpen}
+        ariaHideApp={false}
+        onRequestClose={handleCloseModal}
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <RegisterForm setIsOpen={setIsOpen}/>
       </Modal>
     </div>
   );
