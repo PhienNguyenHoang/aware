@@ -1,8 +1,15 @@
+
+
+
 .searchBox-container {
   position: relative;
   width: 177px;
   display: flex;
   align-items: center;
+  border: solid 1px #b7b7b7;
+  border-radius: 30px;
+  left: 100px;
+  padding-left: 10px;
 }
 
 .searchIcon {
@@ -12,8 +19,8 @@
   margin-bottom: 3px;
 }
 .searchBox {
-  border: solid 1px #b7b7b7;
-  border-radius: 100px;
+  border: none;
   padding: 5px ;    
-  width: 165px;
+  width: 70%;
+  background: transparent;
 }

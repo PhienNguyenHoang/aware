@@ -7,8 +7,9 @@
     height: 69px;
     width: 100%;
     border-bottom: 2px solid #ececec;
-    /* display: flex; */
+    display: flex;
     position: relative;
+    align-items: center;
 }
 
 .lowerBar {
