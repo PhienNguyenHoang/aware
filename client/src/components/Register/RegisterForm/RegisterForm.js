@@ -25,7 +25,7 @@ const RegisterForm = (props) => {
 
   return (
     <div className="form-container">
-      <h2 className="form-title">Register</h2>
+      <span className="form-title">Register</span>
       <form className="form-body" onSubmit={handleSubmit}>
         <span className="form-label">Name:</span>
         <div className="input-field-container">
@@ -56,6 +56,9 @@ const RegisterForm = (props) => {
               setPassword(event.target.value);
             }}
           ></input>
+        </div>
+        <div className="form-dialog">
+          By creating an account you agree to the Terms of Service and Privacy Policy.
         </div>
         <button type="submit" className="form-button">
           Register
