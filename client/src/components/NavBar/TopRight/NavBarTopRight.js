@@ -8,6 +8,8 @@ import Register from '../../Register/Register'
 import './NavBarTopRight.css'
 
 const NavBarTopRight = () => {
+
+
     return (
         <div className='topRightContainer'>
             <Register />
