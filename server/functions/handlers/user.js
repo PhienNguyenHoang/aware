@@ -16,7 +16,7 @@ exports.signup = async (req, res) => {
       password: req.body.password,
     };
     const snapshot = await db.doc(`/users/${newUserData.name}`).get();
-    if (snapshot.exist) {
+    if (snapshot.exists) {
       res.status(400).json({ name: "This name is taken!" });
     } else {
       const result = await firebase
@@ -28,14 +28,13 @@ exports.signup = async (req, res) => {
       userId = result.user.uid;
       userToken = result.user.getIdToken();
       destructObject.token = userToken.i;
-      const { token } = destructObject;
       const userCredentials = {
         name: newUserData.name,
         email: newUserData.email,
         userId,
       };
       await db.doc(`/users/${newUserData.name}`).set(userCredentials);
-      res.status(201).json({ token });
+      res.status(201).json({ token:  `${userToken.i}`});
     }
   } catch (error) {
     console.log(error);
@@ -44,5 +43,20 @@ exports.signup = async (req, res) => {
     } else {
       res.status(500).json({ general: "something went wrong" });
     }
+  }
+};
+
+exports.getAuthenticatedUser = async (req, res) => {
+  let userData = {};
+  try {
+
+    const returnedData = await db.doc(`/users/${req.user.name}`).get();
+    if (returnedData.exists) { 
+      userData.credentials = returnedData.data();
+    }
+    return res.json(userData);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.code });
   }
 };
