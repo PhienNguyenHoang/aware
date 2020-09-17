@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
 import Modal from "react-modal";
+import LoginForm from "./LoginForm/LoginForm";
 
-import RegisterForm from "./RegisterForm/RegisterForm";
+import styles from './Login.module.css'
 
-import "./Register.css";
-
-const Register = () => {
+const Login = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -16,20 +15,21 @@ const Register = () => {
     setIsOpen(false);
   };
 
+
   return (
     <div>
-      <button className="register-button" onClick={handleOpenModal}>Register</button>
+      <button className={styles.Button}onClick={handleOpenModal}>Login</button>
       <Modal
         isOpen={modalIsOpen}
         ariaHideApp={false}
         onRequestClose={handleCloseModal}
-        className="Modal"
+        className={styles.Modal}
         overlayClassName="Overlay"
       >
-        <RegisterForm setIsOpen={setIsOpen}/>
+        <LoginForm />
       </Modal>
     </div>
   );
 };
 
-export default Register;
+export default Login;

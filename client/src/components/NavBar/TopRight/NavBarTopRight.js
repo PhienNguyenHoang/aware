@@ -2,8 +2,9 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
-import cartIcon from '../../../Images/cart.png'
+import Login from './Login/Login'
 import Register from '../../Register/Register'
+import cartIcon from '../../../Images/cart.png'
 
 import './NavBarTopRight.css'
 
@@ -13,7 +14,7 @@ const NavBarTopRight = () => {
     return (
         <div className='topRightContainer'>
             <Register />
-            <span>Log In</span>
+            <Login />
             <img src={cartIcon}></img>
         </div>
     )

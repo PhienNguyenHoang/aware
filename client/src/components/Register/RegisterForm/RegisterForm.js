@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux'
 
-import "./RegisterForm.css";
+import styles from "./RegisterForm.module.css";
 
 import { signupUser } from "../../../redux/actions/userActions";
 
@@ -24,43 +24,43 @@ const RegisterForm = (props) => {
   };
 
   return (
-    <div className="form-container">
-      <span className="form-title">Register</span>
-      <form className="form-body" onSubmit={handleSubmit}>
-        <span className="form-label">Name:</span>
-        <div className="input-field-container">
+    <div className={styles.formContainer}>
+      <span className={styles.formTitle}>Register</span>
+      <form className={styles.formBody} onSubmit={handleSubmit}>
+        <span className={styles.formLabel}>NAME</span>
+        <div className={styles.inputFieldContainer}>
           <input
-            className="input-field"
+            className={styles.inputField}
             value={name}
             onChange={(event) => {
               setName(event.target.value);
             }}
           ></input>
         </div>
-        <span className="form-label">Email:</span>
-        <div className="input-field-container">
+        <span className={styles.formLabel}>EMAIL</span>
+        <div className={styles.inputFieldContainer}>
           <input
-            className="input-field"
+            className={styles.inputField}
             value={email}
             onChange={(event) => {
               setEmail(event.target.value);
             }}
           ></input>
         </div>
-        <span className="form-label">Password:</span>
-        <div className="input-field-container">
+        <span className={styles.formLabel}>PASSWORD</span>
+        <div className={styles.inputFieldContainer}>
           <input
-            className="input-field"
+            className={styles.inputField}
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
             }}
           ></input>
         </div>
-        <div className="form-dialog">
+        <div className={styles.formDialog}>
           By creating an account you agree to the Terms of Service and Privacy Policy.
         </div>
-        <button type="submit" className="form-button">
+        <button type="submit" className={styles.formButton}>
           Register
         </button>
       </form>

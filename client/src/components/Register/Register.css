@@ -1,4 +1,4 @@
-button {
+.register-button {
     background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
@@ -15,7 +15,9 @@ button {
     right: 499px;
     bottom: 120px;
     background-color: white;
-}.form-label {
+}
+
+.form-label {
     margin-top: 150px;
 }
 

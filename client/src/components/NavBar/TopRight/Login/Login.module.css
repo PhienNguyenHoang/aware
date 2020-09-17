@@ -1,0 +1,20 @@
+.Button {
+  width: 120px;
+  height: 35px;
+  border-radius: 100px;
+  border: solid 1px #ffa15f;
+  background: transparent;
+  cursor: pointer;
+  color: #ff7e24;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.Modal {
+  position: absolute;
+  top: 90px;
+  left: 500px;
+  right: 499px;
+  bottom: 250px;
+  background-color: white;
+}
