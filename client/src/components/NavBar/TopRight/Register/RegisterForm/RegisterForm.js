@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import styles from "./RegisterForm.module.css";
 
-import { signupUser } from "../../../redux/actions/userActions";
+import { signupUser } from "../../../../../redux/actions/userActions";
 
 const RegisterForm = (props) => {
   const [name, setName] = useState("");

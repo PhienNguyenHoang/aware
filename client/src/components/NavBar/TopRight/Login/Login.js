@@ -26,7 +26,7 @@ const Login = () => {
         className={styles.Modal}
         overlayClassName="Overlay"
       >
-        <LoginForm />
+        <LoginForm setIsOpen={setIsOpen}/>
       </Modal>
     </div>
   );
