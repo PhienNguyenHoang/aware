@@ -8,7 +8,6 @@ firebase.initializeApp(config);
 
 exports.signup = async (req, res) => {
   let userId, userToken;
-  let destructObject = {};
   try {
     const newUserData = {
       name: req.body.name,
@@ -27,14 +26,13 @@ exports.signup = async (req, res) => {
         );
       userId = result.user.uid;
       userToken = result.user.getIdToken();
-      destructObject.token = userToken.i;
       const userCredentials = {
         name: newUserData.name,
         email: newUserData.email,
         userId,
       };
       await db.doc(`/users/${newUserData.name}`).set(userCredentials);
-      res.status(201).json({ token:  `${userToken.i}`});
+      res.status(201).json({ token: `${userToken.i}` });
     }
   } catch (error) {
     console.log(error);
@@ -46,12 +44,38 @@ exports.signup = async (req, res) => {
   }
 };
 
+//login
+exports.login = async (req, res) => {
+  try {
+    let token;
+    const userData = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+    const result = await firebase
+      .auth()
+      .signInWithEmailAndPassword(userData.email, userData.password);
+    token = await result.user.getIdToken();
+    res.json({ token });
+  } catch (error) {
+    console.log(error);
+    if (
+      error.code === "auth/wrong-password" ||
+      error.code === "auth/user-not-user"
+    ) {
+      res.status(403).json({ error: "Wrong credentials" });
+    } else {
+      res.status(500).json({ error: "something went wrong" });
+    }
+  }
+};
+
+//get authenticated user
 exports.getAuthenticatedUser = async (req, res) => {
   let userData = {};
   try {
-
     const returnedData = await db.doc(`/users/${req.user.name}`).get();
-    if (returnedData.exists) { 
+    if (returnedData.exists) {
       userData.credentials = returnedData.data();
     }
     return res.json(userData);

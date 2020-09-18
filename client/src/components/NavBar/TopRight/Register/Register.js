@@ -18,7 +18,7 @@ const Register = () => {
 
   return (
     <div>
-      <button onClick={handleOpenModal}>Register</button>
+      <button className="register-button" onClick={handleOpenModal}>Register</button>
       <Modal
         isOpen={modalIsOpen}
         ariaHideApp={false}
