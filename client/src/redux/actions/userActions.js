@@ -1,6 +1,9 @@
 import axios from "axios";
 
-import { SET_USER } from "../types";
+import { SET_USER, SET_UNAUTHENTICATED } from "../types";
+import { FBIdToken } from "../../constants/localStorage";
+
+
 
 export const signupUser = (userData) => async (dispatch) => {
   console.log("signing up");
@@ -29,8 +32,13 @@ export const getUserData = () => async (dispatch) => {
   });
 };
 
+export const logoutUser = () => async dispatch => {
+  dispatch({ type: SET_UNAUTHENTICATED});
+  localStorage.removeItem(FBIdToken);
+}
+
 const setAuthorizationHeader = (token) => {
   const FBIdtoken = `Bearer ${token}`;
-  localStorage.setItem("FBIdtoken", FBIdtoken);
+  localStorage.setItem(FBIdToken, FBIdtoken);
   axios.defaults.headers.common["Authorization"] = FBIdtoken;
 };

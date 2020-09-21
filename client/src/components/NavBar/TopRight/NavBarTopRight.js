@@ -3,10 +3,13 @@ import React, {Fragment} from "react";
 import { Link } from "react-router-dom";
 
 import Login from "./Login/Login";
+import UserBox from "./UserBox/UserBox";
 import Register from "../TopRight/Register/Register";
+//icon
 import cartIcon from "../../../Images/cart.png";
-
+//CSS
 import "./NavBarTopRight.css";
+//redux
 import { connect } from "react-redux";
 
 const NavBarTopRight = (props) => {
@@ -17,7 +20,7 @@ const NavBarTopRight = (props) => {
     },
   } = props;
   let topRightMarkUp = authenticated ? (
-    <span>{name}</span>
+    <UserBox name={name} />
   ) : (
     <Fragment>
       <Register />
