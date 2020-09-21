@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 import SearchBar from "./SearchBar/SearchBar";
 import NavBarTopRight from "./TopRight/NavBarTopRight";
@@ -14,7 +14,7 @@ const NavBar = () => {
       <div className="upperBar">
         <SearchBar />
 
-        <img className="navbar-logo" src={logo}></img>
+        <img alt="" className="navbar-logo" src={logo}></img>
         <NavBarTopRight />
       </div>
       <div className="lowerBar">
@@ -22,18 +22,15 @@ const NavBar = () => {
           <div className="flex">
             <span>Men</span>
             <div className="dropdown1">
-              <img className="dropIcon" src={dropIcon} />
+              <img alt="" className="dropIcon" src={dropIcon} />
               <div className="dropdown-content1">
-                <a href="" className="anchor">
+                <a href="/product?ct=men&t=top" className="anchor">
                   Tops
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=men&t=bottom" className="anchor">
                   Bottoms
                 </a>
-                <a href="" className="anchor">
-                  Dresses
-                </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=men&t=jacket" className="anchor">
                   Jackets
                 </a>
               </div>
@@ -42,18 +39,18 @@ const NavBar = () => {
           <div className="flex">
             <span>Ladies</span>
             <div className="dropdown2">
-              <img className="dropIcon" src={dropIcon} />
+              <img alt="" className="dropIcon" src={dropIcon} />
               <div className="dropdown-content2">
-                <a href="" className="anchor">
+                <a href="/product?ct=ladies&t=top" className="anchor">
                   Tops
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=ladies&t=bottom" className="anchor">
                   Bottoms
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=ladies&t=dress" className="anchor">
                   Dresses
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=ladies&t=jacket" className="anchor">
                   Jackets
                 </a>
               </div>
@@ -62,18 +59,18 @@ const NavBar = () => {
           <div className="flex">
             <span>Girls</span>
             <div className="dropdown3">
-              <img className="dropIcon" src={dropIcon} />
+              <img alt="" className="dropIcon" src={dropIcon} />
               <div className="dropdown-content3">
-                <a href="" className="anchor">
+                <a href="/product?ct=girl&t=top" className="anchor">
                   Tops
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=girl&t=bottom" className="anchor">
                   Bottoms
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=girl&t=dress" className="anchor">
                   Dresses
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=girl&t=jacket" className="anchor">
                   Jackets
                 </a>
               </div>
@@ -82,18 +79,15 @@ const NavBar = () => {
           <div className="flex">
             <span>Boys</span>
             <div className="dropdown4">
-              <img className="dropIcon" src={dropIcon} />
+              <img alt="" className="dropIcon" src={dropIcon} />
               <div className="dropdown-content4">
-                <a href="" className="anchor">
+                <a href="/product?ct=boy&t=top" className="anchor">
                   Tops
                 </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=boy&t=bottom" className="anchor">
                   Bottoms
                 </a>
-                <a href="" className="anchor">
-                  Dresses
-                </a>
-                <a href="" className="anchor">
+                <a href="/product?ct=boy&t=jacket" className="anchor">
                   Jackets
                 </a>
               </div>

@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  Route,
+  Switch,
+} from "react-router-dom";
 
 //redux
 import { Provider } from "react-redux";
@@ -31,13 +34,13 @@ const App = () => {
   });
   return (
     <Provider store={store}>
-      <Router>
-        <NavBar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exac path="/product" component={ProductPage} />
-        </Switch>
-      </Router>
+      {/* <Router> */}
+      <NavBar />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/product" component={ProductPage} />
+      </Switch>
+      {/* </Router> */}
     </Provider>
   );
 };

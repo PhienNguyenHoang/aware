@@ -1,7 +1,5 @@
 import React, {Fragment} from "react";
 
-import { Link } from "react-router-dom";
-
 import Login from "./Login/Login";
 import UserBox from "./UserBox/UserBox";
 import Register from "../TopRight/Register/Register";
