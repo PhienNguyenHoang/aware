@@ -2,37 +2,93 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryByCustomerTypeAndType,
+  getAllProductsByCustomerTypeAndType,
 } from "../../firebase/firebase";
+import ProductList from "../../components/ProductList/ProductList";
 import ProductFilter from "../../components/ProductFilter/ProductFilter";
 import ProductCategory from "../../components/ProductCategory/ProductCategory";
-import { getCategory } from "../../redux/actions/productActions";
+import { getCategory } from "../../redux/actions/categoryActions";
+import {
+  getProduct,
+  getChosenCategory,
+} from "../../redux/actions/productActions";
+import { CLEAR_FILTER_CATEGORY } from "../../redux/types";
 import "./ProductPage.css";
 const ProductPage = (props) => {
   const { location } = props;
+  let filteredProductByCategory = [];
   let params = new URLSearchParams(location.search);
   const customerType = params.get("ct");
   const type = params.get("t");
   const dispatch = useDispatch();
-
+  const onClickCategory = (chosenCategory) => {
+    console.log("dispatching");
+    dispatch(getChosenCategory(chosenCategory));
+  };
   useEffect(() => {
     const fetchData = async () => {
-      const categories = await getCategoryByCustomerTypeAndType(customerType, type);
-      dispatch(getCategory(categories))
-    }
+      const categories = await getCategoryByCustomerTypeAndType(
+        customerType,
+        type
+      );
+      dispatch(getCategory(categories));
+      const products = await getAllProductsByCustomerTypeAndType(
+        customerType,
+        type
+      );
+      dispatch(getProduct(products));
+    };
     fetchData();
-  },[])
-  const category = useSelector(state => state.category);
-  const {categories} = category;
-  let categoriesMarkUp = categories.map(item => <ProductCategory name={item.name} key={item.id}/>)
-
+  }, []);
+  const category = useSelector((state) => state.category);
+  const { categories } = category;
+  let categoriesMarkUp = categories.map((item) => (
+    <ProductCategory
+      name={item.name}
+      key={item.id}
+      onClickCategory={onClickCategory}
+      type={type}
+    />
+  ));
+  const product = useSelector((state) => state.product);
+  const { products } = product;
+  const categoryChosen = product.category;
+  if (!categoryChosen) {
+    filteredProductByCategory = products;
+  } else {
+    filteredProductByCategory = products.filter((item) => {
+      return item.category === categoryChosen;
+    });
+  }
+  console.log("redux products", products);
+  console.log("category chosen", categoryChosen);
+  console.log("filtered product", filteredProductByCategory);
+  let productListMarkUp = filteredProductByCategory.map((item) => (
+    <ProductList name={item.name} price={item.price} imageUrl={item.imageUrl} />
+  ));
   return (
     <div className="grid grid-cols-3 gap-4 paddingLeftRight">
       <div className="col-span-1 left-column">
         <div className="category">Category</div>
-        {categoriesMarkUp}
-        <ProductFilter />
+        <div
+          className="all-product"
+          onClick={() => {
+            dispatch({ type: CLEAR_FILTER_CATEGORY });
+          }}
+        >
+          All {type}
+        </div>
+        <div className="category-markup">{categoriesMarkUp}</div>
+        <ProductFilter className="product-filter-box" />
       </div>
-      <div className="col-span-2 ...">hello</div>
+      <div className="col-span-2 right-column" id="margin-left">
+        <div className="product-list-path">
+          <div className="span">
+            <span>{customerType}</span> / <span>{type}</span>
+          </div>
+        </div>
+        <div className="product-panel-flex">{productListMarkUp}</div>
+      </div>
     </div>
   );
 };
