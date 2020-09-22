@@ -16,13 +16,15 @@ const ProductPage = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('useEffect')
     const fetchData = async () => {
       const categories = await getCategoryByCustomerTypeAndType(customerType, type);
+      console.log(categories)
       dispatch(getCategory(categories))
     }
     fetchData();
   }, [])
-  const category = useSelector(state => state.category, _.isEqual());
+  const category = useSelector(state => state.category);
   const {categories} = category;
   console.log(categories)
   let categoriesMarkUp = categories.map(item => <ProductCategory name={item.name} key={item.id}/>)
@@ -31,7 +33,6 @@ const ProductPage = (props) => {
     <div className="grid grid-cols-3 gap-4 paddingLeftRight">
       <div className="col-span-1 left-column">
         <div className="category">Category</div>
-        {/* <ProductCategory /> */}
         {categoriesMarkUp}
         <ProductFilter />
       </div>

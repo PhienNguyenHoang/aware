@@ -29,7 +29,7 @@ const NavBarTopRight = (props) => {
   return (
     <div className="topRightContainer">
       {topRightMarkUp}
-      <img src={cartIcon}></img>
+      <img src={cartIcon} alt=""></img>
     </div>
   );
 };

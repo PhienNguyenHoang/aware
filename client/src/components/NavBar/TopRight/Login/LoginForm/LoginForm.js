@@ -36,7 +36,6 @@ const LoginForm = (props) => {
                 </div>
                 <div className={styles.flexSpaceBetween}>
                     <input type="checkbox" id="checkbox" className={styles.checkbox}></input>
-                    <label for="checkbox"><img/></label>
                     <span>Forgot your password?</span>
                 </div>
                 <button type="submit" className={styles.formButton}>Log In</button>
