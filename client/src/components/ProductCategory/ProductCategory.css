@@ -1,0 +1,9 @@
+.category-list {
+    cursor: pointer;
+    color: #4d4d4d;
+    margin-bottom: 20px;
+}
+
+.category-list:hover {
+    color: #ff6900
+}

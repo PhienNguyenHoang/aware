@@ -5,13 +5,13 @@ import config from "./config";
 !firebase.apps.length && firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
-export const getProductsByCustomerType = async (customterType) => {
+export const getAllProductsByCustomerTypeAndType = async (customerType, type) => {
   try {
     const productList = [];
-    const products = await firestore
+    const query = await firestore
       .collection("products")
-      .where("customerType", "==", customterType)
-      .get();
+      .where("customerType", "==", customerType).where("type", "==", type);
+    const products = await query.get();
     products.forEach((item) => productList.push(item.data()));
     return productList;
   } catch (error) {
@@ -32,3 +32,4 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
     console.log(error);
   }
 };
+
