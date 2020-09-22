@@ -1,4 +1,5 @@
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
+import 'firebase/firestore';
 import config from "./config";
 
 !firebase.apps.length && firebase.initializeApp(config);

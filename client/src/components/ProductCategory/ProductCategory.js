@@ -1,10 +1,8 @@
 import React from 'react'
 
-//redux
-import { useSelector } from 'react-redux';
 
 const ProductCategory = (props) => {
-    const {name, id} = props;
+    const {name} = props;
     return (
         <div>
             {name}

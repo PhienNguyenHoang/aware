@@ -6,7 +6,7 @@ const SearchBar = () => {
   return (
     <div className="searchBox-container">
       <input className="searchBox" type="text"></input>
-      <img className="searchIcon" src={searchIcon} />
+      <img className="searchIcon" src={searchIcon} alt="" />
     </div>
   );
 };

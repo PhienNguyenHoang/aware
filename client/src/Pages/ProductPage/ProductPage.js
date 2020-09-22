@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import _ from 'lodash';
 import {
   getCategoryByCustomerTypeAndType,
 } from "../../firebase/firebase";
@@ -16,17 +15,14 @@ const ProductPage = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('useEffect')
     const fetchData = async () => {
       const categories = await getCategoryByCustomerTypeAndType(customerType, type);
-      console.log(categories)
       dispatch(getCategory(categories))
     }
     fetchData();
-  }, [])
+  },[])
   const category = useSelector(state => state.category);
   const {categories} = category;
-  console.log(categories)
   let categoriesMarkUp = categories.map(item => <ProductCategory name={item.name} key={item.id}/>)
 
   return (
