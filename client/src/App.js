@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
-import {
-  Route,
-  Switch,
-} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 //redux
 import { Provider } from "react-redux";
+import { connect } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from "./redux/types";
 import { getUserData } from "./redux/actions/userActions";
@@ -14,9 +12,10 @@ import axios from "axios";
 import { FBIdToken } from "./constants/localStorage";
 //
 import Home from "./Pages/Home/Home";
-import NavBar from "./components/NavBar/NavBar";
-import "./App.css";
 import ProductPage from "./Pages/ProductPage/ProductPage";
+import Admin from "./Pages/Admin/Admin";
+import AdminDashboard from "./Pages/Admin/AdminDashboard/AdminDashboard";
+import "./App.css";
 axios.defaults.baseURL =
   "https://asia-east2-aware-ecommerce-87f05.cloudfunctions.net/api";
 
@@ -35,14 +34,22 @@ const App = () => {
   return (
     <Provider store={store}>
       {/* <Router> */}
-      <NavBar />
+
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/product" component={ProductPage} />
+        <Route exact path="/admin" component={Admin} />
+        <Route path="/admin/dashboard" component={AdminDashboard}>
+          {/* {authenticated ? <AdminDashboard /> : <Redirect to="/admin" />} */}
+        </Route>
       </Switch>
       {/* </Router> */}
     </Provider>
   );
 };
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
 
 export default App;
