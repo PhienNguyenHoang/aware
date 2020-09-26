@@ -1,6 +1,7 @@
 import { SET_PRODUCT, FILTER_PRODUCT_BY_CATEGORY } from "../types";
 
 export const getProduct = (products) => (dispatch) => {
+  console.log(products)
   dispatch({
     type: SET_PRODUCT,
     payload: products,

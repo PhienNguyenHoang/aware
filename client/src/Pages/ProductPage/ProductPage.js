@@ -45,8 +45,8 @@ const ProductPage = (props) => {
   const { categories } = category;
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
-      name={item.name}
-      key={item.id}
+      name={item}
+      key={item}
       onClickCategory={onClickCategory}
       type={type}
     />

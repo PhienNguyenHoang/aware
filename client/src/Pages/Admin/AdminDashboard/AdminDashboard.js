@@ -1,33 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import logo from "../../../Images/logo.png";
-import mail from "../../../Images/mail.png";
-import noti from "../../../Images/notification.png";
-import dropdown from "../../../Images/dropdown.png";
 import "./AdminDashboard.css";
 import AdminDashboardMenu from "../../../components/AdminDashboardMenu/AdminDashboardMenu";
-const AdminDashboard = ({ user: { credentials, authenticated } }) => {
- 
-
+import ProductTab from "../../../components/AdminDashboardMenu/ProductTab/ProductTab";
+import AdminNavBar from "../../../components/AdminNavBar/AdminNavBar";
+import AddProduct from "../../../components/AddProduct/AddProduct";
+const renderTab = (tab) => {
+  switch(tab) {
+    case 'product':{
+      return <div className="content-box"><ProductTab /></div>
+    };
+    case 'Add product': {
+      return <AddProduct />
+    };    
+  }
+}
+const AdminDashboard = () => {
+  const [tab, setTab] = useState('');
+  let contentMarkUp = renderTab(tab);
+  const handleClick = (tabChosen) => {
+    setTab(tabChosen)
+  }
+  
   return (
-    
     <div className="dashboard-container">
       <div className="dashboard-menu">
         <div className="admin-logo-container">
           <img alt="" src={logo} />
         </div>
-        <AdminDashboardMenu />
+        <AdminDashboardMenu handleClick={handleClick}/>
       </div>
       <div className="dashboard-content">
-        <div className="content-first-bar">
-          <div className="admin-box">
-            <div className="admin-username">
-              {credentials.name} <img alt="" src={dropdown} />
-            </div>
-            <img alt="" src={mail} />
-            <img alt="" src={noti} />
-          </div>
+        <AdminNavBar />
+        <div className="second-bar">
+          <button onClick={() => handleClick('Add product')}>add product</button>
         </div>
+          {contentMarkUp}
       </div>
     </div>
   );
