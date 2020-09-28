@@ -1,7 +1,6 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import config from "./config";
-import _ from 'lodash';
 !firebase.apps.length && firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
@@ -22,6 +21,36 @@ export const getAllProductsByCustomerTypeAndType = async (
     console.log(error);
   }
 };
+
+export const getAllBrand = async () => {
+  try {
+    const brandList = [];
+    const query = await firestore.collection('products');
+    const productRef = await query.get();
+    productRef.forEach(item => {
+      brandList.push(item.data().brand);
+    })
+    const returnArray = [...(new Set(brandList))];
+    return returnArray;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getAllCategory = async () => {
+  try {
+    const categoryList = [];
+    const query = await firestore.collection('products');
+    const productsRef = await query.get();
+    productsRef.forEach(item => {
+      categoryList.push(item.data().category);
+    });
+    const returnArray = [...(new Set(categoryList))];
+    return returnArray;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
   try {

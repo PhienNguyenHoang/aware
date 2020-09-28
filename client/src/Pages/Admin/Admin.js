@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Admin.css";
 import { loginAdmin } from "../../redux/actions/userActions";
 import { connect } from "react-redux";
-const Admin = ({ loginAdmin, history }, { user: authenticated }) => {
+const Admin = ({ loginAdmin, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (event) => {

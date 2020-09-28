@@ -4,7 +4,7 @@ import { getProduct } from "../../../redux/actions/productActions";
 import { getAllProduct } from "../../../firebase/firebase";
 import "./ProductTab.css";
 import DashboardProductCard from "./DashboardProductCard/DashboardProductCard";
-const ProductTab = ({ getProduct, product }) => {
+const ProductTab = ({ getProduct, product, handleClick }) => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchProduct = await getAllProduct();
@@ -25,6 +25,9 @@ const ProductTab = ({ getProduct, product }) => {
 
   return (
     <div className="product-tab-container">
+      <div className="second-bar">
+          <button onClick={() => {handleClick('Add product')}}>add product</button>
+        </div>
       <div className="row">
         <span className="row-product">PRODUCT</span>
         <span className="row-sold">SOLD</span>

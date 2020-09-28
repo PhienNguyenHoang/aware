@@ -12,7 +12,7 @@
   width: 100vw;
   height: 100vh;
   background-color: #f6f6f6;
-  padding: 32px 40px 200px 0;
+  padding: 32px 40px 26px 0;
 }
 .admin-logo-container {
   width: 100%;
@@ -28,10 +28,7 @@
   align-items: center;
   position: relative;
 }
-.second-bar {
-  height: 115px;
-  width: 100%;
-}
+
 .admin-box {
   display: flex;
   justify-content: space-evenly;

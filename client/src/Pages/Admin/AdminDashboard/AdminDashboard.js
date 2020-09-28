@@ -6,10 +6,10 @@ import AdminDashboardMenu from "../../../components/AdminDashboardMenu/AdminDash
 import ProductTab from "../../../components/AdminDashboardMenu/ProductTab/ProductTab";
 import AdminNavBar from "../../../components/AdminNavBar/AdminNavBar";
 import AddProduct from "../../../components/AddProduct/AddProduct";
-const renderTab = (tab) => {
+const renderTab = (tab, handleClick) => {
   switch(tab) {
     case 'product':{
-      return <div className="content-box"><ProductTab /></div>
+      return <div className="content-box"><ProductTab handleClick={handleClick} /></div>
     };
     case 'Add product': {
       return <AddProduct />
@@ -18,10 +18,10 @@ const renderTab = (tab) => {
 }
 const AdminDashboard = () => {
   const [tab, setTab] = useState('');
-  let contentMarkUp = renderTab(tab);
   const handleClick = (tabChosen) => {
     setTab(tabChosen)
   }
+  let contentMarkUp = renderTab(tab, handleClick);
   
   return (
     <div className="dashboard-container">
@@ -33,9 +33,6 @@ const AdminDashboard = () => {
       </div>
       <div className="dashboard-content">
         <AdminNavBar />
-        <div className="second-bar">
-          <button onClick={() => handleClick('Add product')}>add product</button>
-        </div>
           {contentMarkUp}
       </div>
     </div>
