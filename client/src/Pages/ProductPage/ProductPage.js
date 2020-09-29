@@ -14,6 +14,7 @@ import {
 } from "../../redux/actions/productActions";
 import { CLEAR_FILTER_CATEGORY } from "../../redux/types";
 import "./ProductPage.css";
+import NavBar from "../../components/NavBar/NavBar";
 const ProductPage = (props) => {
   const { location } = props;
   let filteredProductByCategory = [];
@@ -44,8 +45,8 @@ const ProductPage = (props) => {
   const { categories } = category;
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
-      name={item.name}
-      key={item.id}
+      name={item}
+      key={item}
       onClickCategory={onClickCategory}
       type={type}
     />
@@ -67,27 +68,30 @@ const ProductPage = (props) => {
     <ProductList name={item.name} price={item.price} imageUrl={item.imageUrl} />
   ));
   return (
-    <div className="grid grid-cols-3 gap-4 paddingLeftRight">
-      <div className="col-span-1 left-column">
-        <div className="category">Category</div>
-        <div
-          className="all-product"
-          onClick={() => {
-            dispatch({ type: CLEAR_FILTER_CATEGORY });
-          }}
-        >
-          All {type}
-        </div>
-        <div className="category-markup">{categoriesMarkUp}</div>
-        <ProductFilter className="product-filter-box" />
-      </div>
-      <div className="col-span-2 right-column" id="margin-left">
-        <div className="product-list-path">
-          <div className="span">
-            <span>{customerType}</span> / <span>{type}</span>
+    <div>
+      <NavBar />
+      <div className="grid grid-cols-3 gap-4 paddingLeftRight">
+        <div className="col-span-1 left-column">
+          <div className="category">Category</div>
+          <div
+            className="all-product"
+            onClick={() => {
+              dispatch({ type: CLEAR_FILTER_CATEGORY });
+            }}
+          >
+            All {type}
           </div>
+          <div className="category-markup">{categoriesMarkUp}</div>
+          <ProductFilter className="product-filter-box" />
         </div>
-        <div className="product-panel-flex">{productListMarkUp}</div>
+        <div className="col-span-2 right-column" id="margin-left">
+          <div className="product-list-path">
+            <div className="span">
+              <span>{customerType}</span> / <span>{type}</span>
+            </div>
+          </div>
+          <div className="product-panel-flex">{productListMarkUp}</div>
+        </div>
       </div>
     </div>
   );
