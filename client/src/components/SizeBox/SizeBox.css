@@ -1,0 +1,18 @@
+.size-box-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: solid 1px #808080;
+  margin-right: 16px;
+  cursor: pointer;
+}
+.size-box-container:active {
+    transform: scale(1.03);
+
+}
+.size-box-container-checked {
+    border: none;
+    background-color: #ffa15f;
+}

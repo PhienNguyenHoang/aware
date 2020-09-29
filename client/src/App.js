@@ -15,6 +15,7 @@ import Home from "./Pages/Home/Home";
 import ProductPage from "./Pages/ProductPage/ProductPage";
 import Admin from "./Pages/Admin/Admin";
 import AdminDashboard from "./Pages/Admin/AdminDashboard/AdminDashboard";
+import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import "./App.css";
 axios.defaults.baseURL =
   "https://asia-east2-aware-ecommerce-87f05.cloudfunctions.net/api";
@@ -37,7 +38,8 @@ const App = () => {
 
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/product" component={ProductPage} />
+        <Route exact path="/product" component={ProductPage} />
+        <Route exact path="/product/:name" component={ProductDetails} />
         <Route exact path="/admin" component={Admin} />
         <Route path="/admin/dashboard" component={AdminDashboard}>
           {/* {authenticated ? <AdminDashboard /> : <Redirect to="/admin" />} */}

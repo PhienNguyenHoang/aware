@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import useForceUpdate from 'use-force-update';
 import Select from "react-select";
 import {
   addProduct,

@@ -70,6 +70,44 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
   }
 };
 
+export const getOneProduct = async (productName) => {
+  try {
+    let productObj = {};
+    const productList = [];
+    const variations = [];
+    const colors = [];
+    const sizes = [];
+    const queryProduct = await firestore.collection('products').where("name", "==", productName);
+    const product = await queryProduct.get();
+    const queryVariation = await firestore.collection('products').doc(productName).collection('variations').get();
+    queryVariation.forEach(item => {
+      variations.push(item.data())
+    })
+    variations.forEach(variation => {
+      colors.push(variation.color);
+      sizes.push(variation.size);
+    })
+    product.forEach(item => {
+      productList.push(item.data());
+    })
+    const productData = productList[0];
+    productObj = {
+      category: productData.category,
+      createdAt: productData.createdAt,
+      customerType: productData.customerType,
+      name: productData.name,
+      price: productData.price,
+      type: productData.type,
+      imageUrl: productData.imageUrl,
+      colors: [...new Set(colors)],
+      sizes: [...new Set(sizes)],
+    }
+    return productObj;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const getAllProduct = async () => {
   try {
     const productList = [];
