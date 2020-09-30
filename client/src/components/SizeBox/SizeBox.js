@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./SizeBox.css";
 const SizeBox = ({ size, isActive, toggleCss }) => {
   // const [classCss, setClassCss] = useState('')
@@ -10,7 +10,6 @@ const SizeBox = ({ size, isActive, toggleCss }) => {
   //         setClassCss('size-box-container-checked')
   //     }
   // }
-  console.log(isActive);
   return (
     <div
       className={`size-box-container ${

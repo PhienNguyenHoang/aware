@@ -4,7 +4,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: solid 1px #808080;
+  border: solid 2px #808080;
   margin-right: 16px;
   cursor: pointer;
 }
@@ -15,4 +15,7 @@
 .size-box-container-checked {
     border: none;
     background-color: #ffa15f;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffff;
 }

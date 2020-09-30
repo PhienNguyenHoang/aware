@@ -16,6 +16,7 @@ import ProductPage from "./Pages/ProductPage/ProductPage";
 import Admin from "./Pages/Admin/Admin";
 import AdminDashboard from "./Pages/Admin/AdminDashboard/AdminDashboard";
 import ProductDetails from "./Pages/ProductDetails/ProductDetails";
+import Cart from "./Pages/Cart/Cart";
 import "./App.css";
 axios.defaults.baseURL =
   "https://asia-east2-aware-ecommerce-87f05.cloudfunctions.net/api";
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/admin/dashboard" component={AdminDashboard}>
           {/* {authenticated ? <AdminDashboard /> : <Redirect to="/admin" />} */}
         </Route>
+        <Route exact path="/cart" component={Cart} />
       </Switch>
       {/* </Router> */}
     </Provider>

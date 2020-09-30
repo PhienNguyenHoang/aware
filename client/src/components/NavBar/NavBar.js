@@ -13,8 +13,9 @@ const NavBar = () => {
     <div className="navbar-container">
       <div className="upperBar">
         <SearchBar />
-
-        <img alt="" className="navbar-logo" src={logo}></img>
+        <a href="/">
+          <img alt="" className="navbar-logo" src={logo}></img>
+        </a>
         <NavBarTopRight />
       </div>
       <div className="lowerBar">
