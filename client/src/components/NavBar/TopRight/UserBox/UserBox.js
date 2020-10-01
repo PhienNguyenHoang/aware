@@ -8,6 +8,7 @@ import { logoutUser } from "../../../../redux/actions/userActions";
 //CSS
 import "./UserBox.css";
 import Loader from "../../../Loader/Loader";
+import { CLEAR_CART } from "../../../../redux/types";
 
 const UserBox = (props) => {
   const { name } = props;
@@ -22,6 +23,7 @@ const UserBox = (props) => {
             className="user-dropdown-button"
             onClick={() => {
               dispatch(logoutUser());
+              dispatch({type: CLEAR_CART})
               history.push(HOME);
             }}
           >

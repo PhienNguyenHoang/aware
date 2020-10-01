@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getOneProduct, addProductToCart } from "../../firebase/firebase";
-import { addItemToCart } from "../../redux/actions/cartActions";
+import {
+  addItemToCart,
+  unAuthAddItemToCart,
+} from "../../redux/actions/cartActions";
 import minus from "../../Images/minus.png";
 import plus from "../../Images/plus.png";
 import NavBar from "../../components/NavBar/NavBar";
@@ -12,7 +15,7 @@ import "./ProductDetails.css";
 const ProductDetails = ({
   history,
   user: { authenticated, credentials },
-  addItemToCart,
+  addItemToCart, unAuthAddItemToCart
 }) => {
   let productDetails, productPath, sizeBoxMarkUp, colorBoxMarkUp;
   const [quantity, setQuantity] = useState(1);
@@ -84,7 +87,8 @@ const ProductDetails = ({
         alert("Please select the size and color you want!");
       }
     } else {
-      addItemToCart(productObj);
+      // addItemToCart(productObj);
+      unAuthAddItemToCart(productObj);
     }
   };
 
@@ -138,4 +142,6 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { addItemToCart })(ProductDetails);
+const mapActionsToProps = { addItemToCart, unAuthAddItemToCart };
+
+export default connect(mapStateToProps, mapActionsToProps)(ProductDetails);

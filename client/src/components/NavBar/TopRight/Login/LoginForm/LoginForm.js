@@ -19,6 +19,9 @@ const LoginForm = (props) => {
             password: password
         }
         loginUser(userLoginData);
+        if(localStorage.getItem("productsInCart")){
+            localStorage.removeItem("productsInCart");
+        }
         setIsOpen(false); 
     }
 

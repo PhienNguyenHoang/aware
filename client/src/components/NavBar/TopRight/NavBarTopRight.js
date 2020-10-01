@@ -11,7 +11,7 @@ import "./NavBarTopRight.css";
 //redux
 import { connect } from "react-redux";
 import { getCart } from "../../../firebase/firebase";
-import { setCartAtLogin } from "../../../redux/actions/cartActions";
+import { setCartAtLogin, setUnauthenticatedCart } from "../../../redux/actions/cartActions";
 
 const NavBarTopRight = (props) => {
   const {
@@ -21,6 +21,7 @@ const NavBarTopRight = (props) => {
     },
     cart: { count },
     setCartAtLogin,
+    setUnauthenticatedCart
   } = props;
   let topRightMarkUp = authenticated ? (
     <UserBox name={name} />
@@ -38,9 +39,18 @@ const NavBarTopRight = (props) => {
           setCartAtLogin(fetchData);
         }
       }
+      else {
+        const localStorageData = localStorage.getItem("productsInCart")
+        if(localStorageData && localStorageData.length > 0){
+          const localStorageProducts = JSON.parse(localStorageData);
+          console.log(localStorageProducts)
+          setUnauthenticatedCart(localStorageProducts);
+        }
+      }
     };
     fetchData();
   }, [name]);
+  console.log(count)
   return (
     <div className="topRightContainer">
       {topRightMarkUp}
@@ -59,4 +69,4 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps, { setCartAtLogin })(NavBarTopRight);
+export default connect(mapStateToProps, { setCartAtLogin, setUnauthenticatedCart })(NavBarTopRight);
