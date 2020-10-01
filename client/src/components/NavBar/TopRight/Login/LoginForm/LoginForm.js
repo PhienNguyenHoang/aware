@@ -10,7 +10,7 @@ const LoginForm = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { loginUser, setIsOpen } = props;
+    const { loginUser, closeLoginModal } = props;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ const LoginForm = (props) => {
         if(localStorage.getItem("productsInCart")){
             localStorage.removeItem("productsInCart");
         }
-        setIsOpen(false); 
+        closeLoginModal(); 
     }
 
     return (

@@ -214,3 +214,11 @@ export const getCart = async (username) => {
     console.log(error);
   }
 };
+
+// export const createAnOrder = async (orderDetails) => {
+//   try {
+    
+//   } catch (error) {
+    
+//   }
+// }

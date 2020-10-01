@@ -3,7 +3,6 @@ import { Route, Switch } from "react-router-dom";
 
 //redux
 import { Provider } from "react-redux";
-import { connect } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from "./redux/types";
 import { getUserData } from "./redux/actions/userActions";
