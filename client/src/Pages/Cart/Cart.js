@@ -1,10 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
+import { nanoid } from "nanoid";
+import { createAnOrder, deleteUserCart } from "../../firebase/firebase";
 import NavBar from "../../components/NavBar/NavBar";
-import "./Cart.css";
 import ProductInCart from "../../components/ProductInCart/ProductInCart";
 import { openLoginModal } from "../../redux/actions/loginActions";
-const Cart = ({ cart: { products }, user: { authenticated, credentials }, openLoginModal }) => {
+import { clearCart } from "../../redux/actions/cartActions";
+import "./Cart.css";
+
+const Cart = ({
+  cart: { products },
+  user: { authenticated, credentials },
+  openLoginModal,
+  clearCart,
+}) => {
   let totalAmount = 0;
   console.log(products);
   console.log(authenticated, credentials.name);
@@ -22,9 +31,19 @@ const Cart = ({ cart: { products }, user: { authenticated, credentials }, openLo
   products.forEach((item) => {
     totalAmount += item.amount;
   });
-  const handleCheckOut = () => {
+  const handleCheckOut = async () => {
     if (!authenticated) {
       openLoginModal();
+    } else {
+      const orderDetails = {
+        products: products,
+        orderId: nanoid(7).split("-").join(""),
+        userId: credentials.userId,
+      };
+      await createAnOrder(orderDetails);
+      alert("order created succefully");
+      await deleteUserCart(credentials.userId);
+      clearCart();
     }
   };
   return (
@@ -68,10 +87,9 @@ const Cart = ({ cart: { products }, user: { authenticated, credentials }, openLo
     </div>
   );
 };
-
 const mapStateToProps = (state) => ({
   user: state.user,
   cart: state.cart,
 });
 
-export default connect(mapStateToProps, { openLoginModal })(Cart);
+export default connect(mapStateToProps, { openLoginModal, clearCart })(Cart);

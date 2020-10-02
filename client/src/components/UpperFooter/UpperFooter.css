@@ -1,0 +1,16 @@
+.upper-footer-container {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.upper-footer-center-content {
+    width: 480px;
+    display: flex;
+    justify-content: space-between;
+}
+.upper-footer-right-content {
+    width: 100px;
+    display: flex;
+    justify-content: space-between;
+}

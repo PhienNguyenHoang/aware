@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Modal from "react-modal";
 import LoginForm from "./LoginForm/LoginForm";
@@ -11,7 +11,6 @@ import {
 } from "../../../../redux/actions/loginActions";
 
 const Login = ({ login: { isOpenModal }, closeLoginModal, openLoginModal }) => {
-  console.log(isOpenModal);
   return (
     <div>
       <button className={styles.Button} onClick={openLoginModal}>

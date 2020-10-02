@@ -215,10 +215,25 @@ export const getCart = async (username) => {
   }
 };
 
-// export const createAnOrder = async (orderDetails) => {
-//   try {
-    
-//   } catch (error) {
-    
-//   }
-// }
+export const createAnOrder = async (orderDetails) => {
+  try {
+    console.log(orderDetails);
+    await firestore
+      .collection("orders")
+      .doc(orderDetails.orderId)
+      .set(orderDetails);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const deleteUserCart = async (userId) => {
+  try {
+    const checkExist = (await firestore.collection("cart").doc(userId).get())
+      .exists;
+    if(checkExist) {
+      await firestore.collection('cart').doc(userId).delete();
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
