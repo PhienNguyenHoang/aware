@@ -4,7 +4,7 @@
 }
 
 .upperBar {
-    height: 69px;
+    height: 80px;
     width: 100%;
     border-bottom: 2px solid #ececec;
     display: flex;
@@ -35,6 +35,8 @@
 .navbar-logo {
    position: absolute;
    right: 47%;
+   display: flex;
+   align-items: center;
    /* margin-left: 30px; */
 }
 

@@ -1,7 +1,67 @@
+.home-page-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .body {
-    height: 100vh;
+  /* height: 100vh; */
+  flex: 1 1 auto;
+  padding: 37px 130px 37px 130px;
 }
 
 .footer {
-    height: 15vh;
+  height: 15vh;
+  padding: 52px 130px 27px 130px;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.08), 0 -1px 4px 0 rgba(0, 0, 0, 0.08);
+}
+.customize-home-container {
+  margin-top: 19px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.customize-home {
+  height: 405px;
+  width: 280px;
+  position: relative;
+}
+.home-men {
+  background-image: url("../../Images/men.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.home-ladies {
+  background-image: url("../../Images/ladies.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.home-girls {
+  background-image: url("../../Images//girls.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.home-boys {
+  background-image: url("../../Images/boys.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.shop-now-button {
+  width: 140px;
+  height: 40px;
+  background-color: #ffa15f;
+  position: absolute;
+  left: 70px;
+  bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+.shop-now-button:hover {
+  transform: scale(1.03);
+}
+.customize-home:hover {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
 }

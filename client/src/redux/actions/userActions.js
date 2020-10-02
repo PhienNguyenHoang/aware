@@ -30,7 +30,6 @@ export const loginAdmin = (adminLoginData, history) => async (dispatch) => {
 export const getUserData = () => async (dispatch) => {
   try {
     const returnedUserData = await axios.get("/user");
-    console.log(returnedUserData.data);
     dispatch({
       type: SET_USER,
       payload: returnedUserData.data,

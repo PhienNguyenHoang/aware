@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import useForceUpdate from 'use-force-update';
 import Select from "react-select";
 import {
   addProduct,
@@ -205,7 +204,7 @@ const AddProduct = () => {
         </div>
         <div className="add-product-button-container">
           <div className="add-product-button-white">
-            <button>Cancel</button>
+            <button onClick={resetHooks}>Cancel</button>
           </div>
           <div className="add-product-button-orange">
             <button type="submit">Complete</button>

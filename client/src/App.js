@@ -3,7 +3,6 @@ import { Route, Switch } from "react-router-dom";
 
 //redux
 import { Provider } from "react-redux";
-import { connect } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from "./redux/types";
 import { getUserData } from "./redux/actions/userActions";
@@ -15,6 +14,8 @@ import Home from "./Pages/Home/Home";
 import ProductPage from "./Pages/ProductPage/ProductPage";
 import Admin from "./Pages/Admin/Admin";
 import AdminDashboard from "./Pages/Admin/AdminDashboard/AdminDashboard";
+import ProductDetails from "./Pages/ProductDetails/ProductDetails";
+import Cart from "./Pages/Cart/Cart";
 import "./App.css";
 axios.defaults.baseURL =
   "https://asia-east2-aware-ecommerce-87f05.cloudfunctions.net/api";
@@ -37,11 +38,13 @@ const App = () => {
 
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/product" component={ProductPage} />
+        <Route exact path="/product" component={ProductPage} />
+        <Route exact path="/product/:name" component={ProductDetails} />
         <Route exact path="/admin" component={Admin} />
         <Route path="/admin/dashboard" component={AdminDashboard}>
           {/* {authenticated ? <AdminDashboard /> : <Redirect to="/admin" />} */}
         </Route>
+        <Route exact path="/cart" component={Cart} />
       </Switch>
       {/* </Router> */}
     </Provider>

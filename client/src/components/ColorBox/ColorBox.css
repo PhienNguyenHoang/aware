@@ -1,0 +1,19 @@
+.color-box-container {
+    width: 25px;
+    height: 25px;
+    margin-right: 20px;
+    border-radius: 50px;
+}
+.color-box-container-checked {
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+}
+.color-box-border {
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    margin-right: 20px;  
+    border-bottom: solid 2px black;
+    text-align: center;
+}
