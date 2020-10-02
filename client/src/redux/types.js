@@ -17,3 +17,5 @@ export const CLEAR_CART = 'CLEAR_CART';
 //login modal
 export const SET_OPEN_LOGIN_MODAL = 'SET_OPEN_LOGIN_MODAL';
 export const SET_CLOSE_LOGIN_MODAL = 'SET_CLOSE_LOGIN_MODAL'; 
+//order
+export const SET_ORDER = 'SET_ORDER';

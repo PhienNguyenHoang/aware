@@ -5,18 +5,28 @@ import products from "../../Images/products-dark.png";
 import payments from "../../Images/payment-dark.png";
 import setting from "../../Images/setting-dark.png";
 import "./AdminDashboardMenu.css";
-const AdminDashboardMenu = ({handleClick}) => {
+const AdminDashboardMenu = ({ handleClick }) => {
   return (
     <div className="">
       <div className="menu-item">
         <img alt="" src={overview} className="menu-icon" />
         Overview
       </div>
-      <div className="menu-item">
+      <div
+        className="menu-item"
+        onClick={() => {
+          handleClick("orders");
+        }}
+      >
         <img alt="" src={orders} className="menu-icon" />
         Orders
       </div>
-      <div className="menu-item menu-item-product"  onClick={() => {handleClick('product')}}>
+      <div
+        className="menu-item menu-item-product"
+        onClick={() => {
+          handleClick("product");
+        }}
+      >
         <img alt="" src={products} className="menu-icon" />
         Products
       </div>
