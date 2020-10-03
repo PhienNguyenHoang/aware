@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import './ProductFilter.css'
-const ProductFilter = () => {
+import "./ProductFilter.css";
+const ProductFilter = ({ setFilterConditions }) => {
   return (
     <Fragment>
       <div className="filter">Filter</div>
@@ -14,3 +14,5 @@ const ProductFilter = () => {
 };
 
 export default ProductFilter;
+
+

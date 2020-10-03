@@ -10,10 +10,16 @@ export const getAllProductsByCustomerTypeAndType = async (
 ) => {
   try {
     const productList = [];
-    const query = await firestore
-      .collection("products")
-      .where("customerType", "==", customerType)
-      .where("type", "==", type);
+    //cosnt filterOptions = {color: "", size: "", ..}
+    //Object.keys({}) --->> [color, size, brand, ..]
+
+    const query = firestore.collection('products').where("customerType", '==', customerType);
+    if(type) {
+      query.where("type", "==", type);
+    }
+    // [].forEach(item => {
+    //   query.where(item, "==", filterOptions[item]);
+   // }
     const products = await query.get();
     products.forEach((item) => productList.push(item.data()));
     return productList;
@@ -55,10 +61,11 @@ export const getAllCategory = async () => {
 export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
   try {
     const categoryList = [];
-    const query = await firestore
-      .collection("products")
-      .where("customerType", "==", customterType)
-      .where("type", "==", type);
+    const query = firestore.collection('products').where("customerType", "==", customterType);
+    if(type) {
+      query.where("type", "==", type);
+    }
+    
     const products = await query.get();
     products.forEach((item) => {
       categoryList.push(item.data().category);

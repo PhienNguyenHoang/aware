@@ -15,8 +15,9 @@ import {
 import { CLEAR_FILTER_CATEGORY } from "../../redux/types";
 import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
-const ProductPage = (props) => {
-  const { location } = props;
+import { useState } from "react";
+const ProductPage = ({location}) => {
+  const [filterConditions, setFilterConditions] = useState([]);
   let filteredProductByCategory = [];
   let params = new URLSearchParams(location.search);
   const customerType = params.get("ct");
@@ -26,16 +27,18 @@ const ProductPage = (props) => {
     console.log("dispatching");
     dispatch(getChosenCategory(chosenCategory));
   };
+  console.log(type);
   useEffect(() => {
     const fetchData = async () => {
       const categories = await getCategoryByCustomerTypeAndType(
         customerType,
-        type
-      );
-      dispatch(getCategory(categories));
-      const products = await getAllProductsByCustomerTypeAndType(
-        customerType,
-        type
+        type,
+        );
+        dispatch(getCategory(categories));
+        const products = await getAllProductsByCustomerTypeAndType(
+          customerType,
+          type
+          //filterConditions,
       );
       dispatch(getProduct(products));
     };
@@ -51,9 +54,7 @@ const ProductPage = (props) => {
       type={type}
     />
   ));
-  const product = useSelector((state) => state.product);
-  const { products } = product;
-  const categoryChosen = product.category;
+  const {products, category: categoryChosen} = useSelector((state) => state.product);
   if (!categoryChosen) {
     filteredProductByCategory = products;
   } else {
@@ -61,9 +62,9 @@ const ProductPage = (props) => {
       return item.category === categoryChosen;
     });
   }
-  console.log("redux products", products);
-  console.log("category chosen", categoryChosen);
-  console.log("filtered product", filteredProductByCategory);
+  // console.log("redux products", products);
+  // console.log("category chosen", categoryChosen);
+  // console.log("filtered product", filteredProductByCategory);
   let productListMarkUp = filteredProductByCategory.map((item) => (
     <ProductList name={item.name} price={item.price} imageUrl={item.imageUrl} />
   ));
@@ -82,7 +83,7 @@ const ProductPage = (props) => {
             All {type}
           </div>
           <div className="category-markup">{categoriesMarkUp}</div>
-          <ProductFilter className="product-filter-box" />
+          <ProductFilter className="product-filter-box" setFilterConditions={setFilterConditions}/>
         </div>
         <div className="col-span-2 right-column" id="margin-left">
           <div className="product-list-path">
