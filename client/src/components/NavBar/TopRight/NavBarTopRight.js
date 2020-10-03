@@ -18,6 +18,8 @@ const NavBarTopRight = (props) => {
     user: {
       authenticated,
       credentials: { name },
+      status,
+      error
     },
     cart: { count },
     setCartAtLogin,
@@ -50,7 +52,7 @@ const NavBarTopRight = (props) => {
     };
     fetchData();
   }, [name]);
-  console.log(count)
+  console.log(status, error)
   return (
     <div className="topRightContainer">
       {topRightMarkUp}
