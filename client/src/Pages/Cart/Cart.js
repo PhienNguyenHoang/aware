@@ -39,11 +39,14 @@ const Cart = ({
         products: products,
         orderId: nanoid(7).split("-").join(""),
         userId: credentials.userId,
+        status: "pending",
       };
-      await createAnOrder(orderDetails);
-      alert("order created succefully");
-      await deleteUserCart(credentials.userId);
-      clearCart();
+      const result = await createAnOrder(orderDetails);
+      if (result === "successfully") {
+          alert("order created succefully");
+          await deleteUserCart(credentials.userId);
+          clearCart();
+      }
     }
   };
   return (

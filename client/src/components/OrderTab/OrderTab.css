@@ -1,0 +1,8 @@
+.order-tab-container {
+    width: 100%;
+    height: 100%;
+    padding-top: 23px;
+}
+.order-tab-title {
+    border-bottom: solid 2px #f6f6f6;
+}

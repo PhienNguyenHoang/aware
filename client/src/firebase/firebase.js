@@ -215,13 +215,37 @@ export const getCart = async (username) => {
   }
 };
 
+export const getAllOrder = async () => {
+  try {
+    let orderList = [];
+    const query = await firestore.collection('orders').get();
+    query.forEach(item => {
+      orderList.push(item.data())
+    });
+    return orderList;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const createAnOrder = async (orderDetails) => {
   try {
     console.log(orderDetails);
-    await firestore
-      .collection("orders")
-      .doc(orderDetails.orderId)
-      .set(orderDetails);
+
+    const orderObject = {
+      orderId: orderDetails.orderId,
+      products: orderDetails.products,
+      status: orderDetails.status,
+      userId: orderDetails.userId,
+      createdAt: new Date().toISOString(),
+    };
+    if (orderObject.products && orderObject.userId) {
+      await firestore
+        .collection("orders")
+        .doc(orderDetails.orderId)
+        .set(orderObject);
+    }
+    return 'successfully';
   } catch (error) {
     console.log(error);
   }
@@ -230,10 +254,10 @@ export const deleteUserCart = async (userId) => {
   try {
     const checkExist = (await firestore.collection("cart").doc(userId).get())
       .exists;
-    if(checkExist) {
-      await firestore.collection('cart').doc(userId).delete();
+    if (checkExist) {
+      await firestore.collection("cart").doc(userId).delete();
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };

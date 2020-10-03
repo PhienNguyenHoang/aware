@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 import styles from "./RegisterForm.module.css";
 
 import { signupUser } from "../../../../../redux/actions/userActions";
 
-const RegisterForm = (props) => {
+const RegisterForm = ({ setIsOpen, signupUser, status, error }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsOpen } = props;
-  const { signupUser } = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,7 +18,9 @@ const RegisterForm = (props) => {
       password: password,
     };
     signupUser(newUserData);
-    setIsOpen(false);
+    if (status === "SUCCESS") {
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -28,7 +28,13 @@ const RegisterForm = (props) => {
       <span className={styles.formTitle}>Register</span>
       <form className={styles.formBody} onSubmit={handleSubmit}>
         <span className={styles.formLabel}>NAME</span>
-        <div className={styles.inputFieldContainer}>
+        <div
+          className={
+            error.name
+              ? styles.inputFieldContainerError
+              : styles.inputFieldContainer
+          }
+        >
           <input
             className={styles.inputField}
             value={name}
@@ -37,8 +43,15 @@ const RegisterForm = (props) => {
             }}
           ></input>
         </div>
+        {error.name && <div className={styles.errorMessage}>{error.name}</div>}
         <span className={styles.formLabel}>EMAIL</span>
-        <div className={styles.inputFieldContainer}>
+        <div
+          className={
+            error.email
+              ? styles.inputFieldContainerError
+              : styles.inputFieldContainer
+          }
+        >
           <input
             className={styles.inputField}
             value={email}
@@ -47,6 +60,9 @@ const RegisterForm = (props) => {
             }}
           ></input>
         </div>
+        {error.email && (
+          <div className={styles.errorMessage}>{error.email}</div>
+        )}
         <span className={styles.formLabel}>PASSWORD</span>
         <div className={styles.inputFieldContainer}>
           <input
@@ -58,7 +74,8 @@ const RegisterForm = (props) => {
           ></input>
         </div>
         <div className={styles.formDialog}>
-          By creating an account you agree to the Terms of Service and Privacy Policy.
+          By creating an account you agree to the Terms of Service and Privacy
+          Policy.
         </div>
         <button type="submit" className={styles.formButton}>
           Register
@@ -68,4 +85,4 @@ const RegisterForm = (props) => {
   );
 };
 
-export default connect(null, {signupUser})(RegisterForm);
+export default connect(null, { signupUser })(RegisterForm);

@@ -2,6 +2,12 @@
 export const SET_USER = "SET_USER";
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 export const SET_UNAUTHENTICATED = 'SET_UNAUTHENTICATED';
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_ERROR = 'SIGNUP_ERROR'
+export const GET_USER_REQUEST =  'GET_USER_REQUEST';
+export const RESET_USER_STATUS = 'RESET_USER_STATUS';
+export const RESET_USER_ERROR = 'RESET_USER_ERROR';
 //Category
 export const SET_CATEGORY = 'SET_CATEGORY';
 //product
@@ -17,3 +23,5 @@ export const CLEAR_CART = 'CLEAR_CART';
 //login modal
 export const SET_OPEN_LOGIN_MODAL = 'SET_OPEN_LOGIN_MODAL';
 export const SET_CLOSE_LOGIN_MODAL = 'SET_CLOSE_LOGIN_MODAL'; 
+//order
+export const SET_ORDER = 'SET_ORDER';
