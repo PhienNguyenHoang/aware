@@ -7,8 +7,60 @@
 }
 
 .filter-list {
-    padding: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 0;
     font-size: 14px;
     color: #202124;
     border-bottom: solid 2px #979797;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-list:active {
+  transform: scale(1.03);
+}
+.filter-list-open {
+  padding: 5px 5px 5px 0;
+  font-size: 14px;
+  color: #202124;
+  border-bottom: solid 2px #979797;
+  border-style: dashed;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.size-dropdown-content {
+  display: none;
+}
+.size-dropdown-content-open {
+  display: flex;
+  align-items: center;
+  padding: 15px 0 20px 0
+}
+.color-dropdown-content {
+  display: none;
+}
+.color-dropdown-content-open {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 15px 0 20px 0;
+}
+.brand-dropdown-content {
+  display: none;
+}
+.brand-dropdown-content-open {
+  display: block;
+}
+.price-dropdown-content {
+  display: none;
+}
+.price-dropdown-content-open {
+  display: block;
+}
+.available-dropdown-content {
+  display: none;
+}
+.available-dropdown-content-open {
+  display: block;
 }

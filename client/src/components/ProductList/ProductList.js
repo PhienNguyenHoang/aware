@@ -8,7 +8,6 @@ const ProductList = (props) => {
 //       item.toLowerCase()
 //   });
 //   productURL.join('-');
-  console.log(productURL);
   return (
     <Link to={`/product/${productURL}`}>
       <div className="product-box">
