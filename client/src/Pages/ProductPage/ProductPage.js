@@ -41,6 +41,7 @@ const ProductPage = ({ location }) => {
         categoryChosen,
         filterConditions
       );
+      console.log(products);
       dispatch(getProduct(products));
     };
     fetchData();
@@ -72,7 +73,6 @@ const ProductPage = ({ location }) => {
             className="all-product"
             onClick={() => {
               dispatch(clearChosenCategory());
-              
             }}
           >
             All {type}

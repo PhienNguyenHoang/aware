@@ -5,7 +5,11 @@ import "./ProductFilter.css";
 import { useState } from "react";
 import SizeBox from "../SizeBox/SizeBox";
 import ColorBox from "../ColorBox/ColorBox";
-const ProductFilter = ({ setFilterConditions, colorList, filterConditions }) => {
+const ProductFilter = ({
+  setFilterConditions,
+  colorList,
+  filterConditions,
+}) => {
   const [openSize, setOpenSize] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openBrand, setOpenBrand] = useState(false);
@@ -18,6 +22,7 @@ const ProductFilter = ({ setFilterConditions, colorList, filterConditions }) => 
     if (openSize) {
       setOpenSize(false);
       setActiveSize("");
+      setFilterConditions({});
     } else {
       setOpenSize(true);
     }
@@ -25,7 +30,8 @@ const ProductFilter = ({ setFilterConditions, colorList, filterConditions }) => 
   const toggleColor = () => {
     if (openColor) {
       setOpenColor(false);
-      setActiveColor("")
+      setActiveColor("");
+      setFilterConditions({});
     } else {
       setOpenColor(true);
     }
@@ -53,12 +59,11 @@ const ProductFilter = ({ setFilterConditions, colorList, filterConditions }) => 
   };
   const toggleCssSize = (clickedItem) => {
     setActiveSize(clickedItem);
-    setFilterConditions({...filterConditions, size: clickedItem})
-
+    setFilterConditions({ ...filterConditions, size: clickedItem });
   };
   const toggleCssColor = (clickedItem) => {
     setActiveColor(clickedItem);
-    setFilterConditions({...filterConditions, color: clickedItem})
+    setFilterConditions({ ...filterConditions, color: clickedItem });
   };
   const sizeBoxMarkup = sizeArray.map((item, index) => (
     <SizeBox
