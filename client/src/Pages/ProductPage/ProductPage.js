@@ -7,25 +7,27 @@ import {
 import ProductList from "../../components/ProductList/ProductList";
 import ProductFilter from "../../components/ProductFilter/ProductFilter";
 import ProductCategory from "../../components/ProductCategory/ProductCategory";
-import { getCategory } from "../../redux/actions/categoryActions";
 import {
-  getProduct,
-  getChosenCategory,
-} from "../../redux/actions/productActions";
-import { CLEAR_FILTER_CATEGORY } from "../../redux/types";
+  getCategory,
+  chooseCategory,
+  clearChosenCategory,
+} from "../../redux/actions/categoryActions";
+import { getProduct } from "../../redux/actions/productActions";
 import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
-const ProductPage = (props) => {
-  const { location } = props;
-  let filteredProductByCategory = [];
+import { useState } from "react";
+const ProductPage = ({ location }) => {
+  const [filterConditions, setFilterConditions] = useState({});
   let params = new URLSearchParams(location.search);
   const customerType = params.get("ct");
   const type = params.get("t");
   const dispatch = useDispatch();
   const onClickCategory = (chosenCategory) => {
-    console.log("dispatching");
-    dispatch(getChosenCategory(chosenCategory));
+    dispatch(chooseCategory(chosenCategory));
   };
+  const { products } = useSelector((state) => state.product);
+  const category = useSelector((state) => state.category);
+  const { categories, categoryChosen } = category;
   useEffect(() => {
     const fetchData = async () => {
       const categories = await getCategoryByCustomerTypeAndType(
@@ -35,14 +37,14 @@ const ProductPage = (props) => {
       dispatch(getCategory(categories));
       const products = await getAllProductsByCustomerTypeAndType(
         customerType,
-        type
+        type,
+        categoryChosen,
+        filterConditions
       );
       dispatch(getProduct(products));
     };
     fetchData();
-  }, []);
-  const category = useSelector((state) => state.category);
-  const { categories } = category;
+  }, [categoryChosen, filterConditions]);
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
       name={item}
@@ -51,22 +53,15 @@ const ProductPage = (props) => {
       type={type}
     />
   ));
-  const product = useSelector((state) => state.product);
-  const { products } = product;
-  const categoryChosen = product.category;
-  if (!categoryChosen) {
-    filteredProductByCategory = products;
-  } else {
-    filteredProductByCategory = products.filter((item) => {
-      return item.category === categoryChosen;
-    });
-  }
-  console.log("redux products", products);
-  console.log("category chosen", categoryChosen);
-  console.log("filtered product", filteredProductByCategory);
-  let productListMarkUp = filteredProductByCategory.map((item) => (
+  let productListMarkUp = products.map((item) => (
     <ProductList name={item.name} price={item.price} imageUrl={item.imageUrl} />
   ));
+  console.log(filterConditions);
+  const colorList = [];
+  products.forEach((item) => {
+    colorList.push(...item.color);
+  });
+  const uniqueColorList = [...new Set(colorList)];
   return (
     <div>
       <NavBar />
@@ -76,13 +71,21 @@ const ProductPage = (props) => {
           <div
             className="all-product"
             onClick={() => {
-              dispatch({ type: CLEAR_FILTER_CATEGORY });
+              dispatch(clearChosenCategory());
+              
             }}
           >
             All {type}
           </div>
           <div className="category-markup">{categoriesMarkUp}</div>
-          <ProductFilter className="product-filter-box" />
+          <ProductFilter
+            className="product-filter-box"
+            colorList={uniqueColorList}
+            filterConditions={filterConditions}
+            setFilterConditions={setFilterConditions}
+            customerType={customerType}
+            type={type}
+          />
         </div>
         <div className="col-span-2 right-column" id="margin-left">
           <div className="product-list-path">

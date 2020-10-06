@@ -1,0 +1,1 @@
+export const sizeArray = ["S", "M", "L"];

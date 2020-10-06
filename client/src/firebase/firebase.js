@@ -6,16 +6,38 @@ import config from "./config";
 const firestore = firebase.firestore();
 export const getAllProductsByCustomerTypeAndType = async (
   customerType,
-  type
+  type,
+  categoryChosen,
+  filterConditions
 ) => {
   try {
     const productList = [];
-    const query = await firestore
+    //cosnt filterOptions = {color: "", size: "", ..}
+    //Object.keys({}) --->> [color, size, brand, ..]
+    const filterOptions = Object.keys(filterConditions);
+    let query = firestore
       .collection("products")
-      .where("customerType", "==", customerType)
-      .where("type", "==", type);
+      .where("customerType", "==", customerType);
+    if (categoryChosen) {
+      query = query.where("category", "==", categoryChosen);
+    }
+    if (type) {
+      query = query.where("type", "==", type);
+    }
+
+    // [].forEach(item => {
+    //   query.where(item, "==", filterOptions[item]);
+    // }
+    console.log(filterOptions)
+    if (filterOptions.length > 0) {
+      filterOptions.forEach((item) => {
+        console.log(item, filterConditions[item])
+        query = query.where(`${item}`, "array-contains", filterConditions[item]);
+      });
+    }
     const products = await query.get();
     products.forEach((item) => productList.push(item.data()));
+    console.log(productList)
     return productList;
   } catch (error) {
     console.log(error);
@@ -55,10 +77,13 @@ export const getAllCategory = async () => {
 export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
   try {
     const categoryList = [];
-    const query = await firestore
+    const query = firestore
       .collection("products")
-      .where("customerType", "==", customterType)
-      .where("type", "==", type);
+      .where("customerType", "==", customterType);
+    if (type) {
+      query.where("type", "==", type);
+    }
+
     const products = await query.get();
     products.forEach((item) => {
       categoryList.push(item.data().category);
@@ -163,11 +188,9 @@ export const addProduct = async (productDetails) => {
 
 export const addProductToCart = async (cartData) => {
   try {
-    console.log("executing");
     const checkExist = (
       await firestore.collection("cart").doc(cartData.userId).get()
     ).exists;
-    console.log(checkExist);
     if (checkExist) {
       if (cartData.product.color && cartData.product.size) {
         await firestore
@@ -218,15 +241,15 @@ export const getCart = async (username) => {
 export const getAllOrder = async () => {
   try {
     let orderList = [];
-    const query = await firestore.collection('orders').get();
-    query.forEach(item => {
-      orderList.push(item.data())
+    const query = await firestore.collection("orders").get();
+    query.forEach((item) => {
+      orderList.push(item.data());
     });
     return orderList;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const createAnOrder = async (orderDetails) => {
   try {
@@ -245,7 +268,7 @@ export const createAnOrder = async (orderDetails) => {
         .doc(orderDetails.orderId)
         .set(orderObject);
     }
-    return 'successfully';
+    return "successfully";
   } catch (error) {
     console.log(error);
   }
