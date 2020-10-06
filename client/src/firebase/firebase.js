@@ -15,8 +15,6 @@ export const getAllProductsByCustomerTypeAndType = async (
   try {
     let productList = [];
     let getProductArray = [];
-    //cosnt filterOptions = {color: "", size: "", ..}
-    //Object.keys({}) --->> [color, size, brand, ..]
     const filterOptions = Object.keys(filterConditions);
     let query = firestore
       .collection("products")
@@ -27,87 +25,33 @@ export const getAllProductsByCustomerTypeAndType = async (
     if (type) {
       query = query.where("type", "==", type);
     }
-    // [].forEach(item => {
-    //   query.where(item, "==", filterOptions[item]);
-    // }
-    // if (filterOptions.length > 0) {
-    //   filterOptions.forEach((item) => {
-    //     console.log(item, filterConditions[item])
-    //     query = query.where(item, "array-contains", filterConditions[item]);
-    //   });
-    // }
     const products = await query.get();
-
-    // const getProduct = async () => {
-      // await pForEach(products, async doc => {
-      //       console.log(1)
-      //   let variations = firestore
-      //   .collection("products")
-      //   .doc(doc.id)
-      //   .collection("variations");
-      // filterOptions.forEach((item) => {
-      //   console.log(item);
-      //   variations = variations.where(item, "==", filterConditions[item]);
-      // });
-      // let variationsDocs = await variations.get();
-      // let productName = [];
-      // variationsDocs.forEach((variationsDoc) => {
-      //   console.log(variationsDoc.data().name);
-      //   productName.push(variationsDoc.data().name);
-      // });
-      // let uniqueProductName = [...new Set(productName)];
-      // console.log(uniqueProductName);
-      // // filteredProducts.push(...uniqueProductName);
-      // if (uniqueProductName.length > 0) {
-      //   const toBePushedProduct = await firestore
-      //     .collection("products")
-      //     .doc(uniqueProductName[0])
-      //     .get();
-      //   // toBePushedProduct.forEach((item) => {
-      //   //   productList.push(item.data());
-      //   // });
-      //   productList.push(toBePushedProduct.data());
-      // }
-      // })
-    //   console.log(productList);
-    //   return productList;
-    // };
-
     if (filterOptions.length > 0) {
       products.forEach((doc) => {
         getProductArray.push(doc);
       });
       await pForEach(getProductArray, async (doc) => {
-        console.log(1);
         let variations = firestore
           .collection("products")
           .doc(doc.id)
           .collection("variations");
         filterOptions.forEach((item) => {
-          console.log(item);
           variations = variations.where(item, "==", filterConditions[item]);
         });
         let variationsDocs = await variations.get();
         let productName = [];
         variationsDocs.forEach((variationsDoc) => {
-          console.log(variationsDoc.data().name);
           productName.push(variationsDoc.data().name);
         });
         let uniqueProductName = [...new Set(productName)];
-        console.log(uniqueProductName);
-        // filteredProducts.push(...uniqueProductName);
         if (uniqueProductName.length > 0) {
           const toBePushedProduct = await firestore
             .collection("products")
             .doc(uniqueProductName[0])
             .get();
-          // toBePushedProduct.forEach((item) => {
-          //   productList.push(item.data());
-          // });
           productList.push(toBePushedProduct.data());
         }
       });
-      console.log(productList)
       return productList
     } else {
       products.forEach((item) => {

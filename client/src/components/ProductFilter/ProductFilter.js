@@ -75,7 +75,7 @@ const ProductFilter = ({
   ));
   const colorBoxMarkup = colorList.map((item, index) => (
     <ColorBox
-      kye={item}
+      key={item}
       color={item}
       isActive={activeColor === item}
       toggleCss={toggleCssColor}

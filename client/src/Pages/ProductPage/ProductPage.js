@@ -41,7 +41,6 @@ const ProductPage = ({ location }) => {
         categoryChosen,
         filterConditions
       );
-      console.log(products);
       dispatch(getProduct(products));
     };
     fetchData();
@@ -54,10 +53,9 @@ const ProductPage = ({ location }) => {
       type={type}
     />
   ));
-  let productListMarkUp = products.map((item) => (
-    <ProductList name={item.name} price={item.price} imageUrl={item.imageUrl} />
+  let productListMarkUp = products.map((item, index) => (
+    <ProductList key={index} name={item.name} price={item.price} imageUrl={item.imageUrl} />
   ));
-  console.log(filterConditions);
   const colorList = [];
   products.forEach((item) => {
     colorList.push(...item.color);

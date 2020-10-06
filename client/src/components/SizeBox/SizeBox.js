@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./SizeBox.css";
 const SizeBox = ({ size, isActive, toggleCss }) => {
   // const [classCss, setClassCss] = useState('')
