@@ -2,6 +2,11 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { forEach as pForEach } from "p-iteration";
 import config from "./config";
+import {
+  MARK_COMPLETE_SUCCESS,
+  MARK_COMPLETE_REQUEST,
+  MARK_COMPLETE_ERROR,
+} from "../redux/types";
 
 !firebase.apps.length && firebase.initializeApp(config);
 
@@ -52,7 +57,7 @@ export const getAllProductsByCustomerTypeAndType = async (
           productList.push(toBePushedProduct.data());
         }
       });
-      return productList
+      return productList;
     } else {
       products.forEach((item) => {
         productList.push(item.data());
@@ -302,5 +307,21 @@ export const deleteUserCart = async (userId) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const markOrderComplete = async (orderId) => {
+  try {
+    const checkExist = (await firestore.collection("orders").doc(orderId).get())
+      .exists;
+    if (checkExist) {
+      await firestore.collection("orders").doc(orderId).update({
+        status: "complete",
+      });
+    } else {
+      throw "Order does not exist";
+    }
+  } catch (error) {
+    console.log(error)
   }
 };
