@@ -15,7 +15,7 @@ const reducers = combineReducers({
   category: categoryReducer,
   product: productReducer,
   cart: cartReducer,
-  login: loginReducer,
+  // login: loginReducer,
   order: orderReducer
 });
 

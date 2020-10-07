@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import Loader from "../../../../Loader/Loader";
 
 import styles from "./RegisterForm.module.css";
 
@@ -22,6 +23,14 @@ const RegisterForm = ({ setIsOpen, signupUser, status, error }) => {
       setIsOpen(false);
     }
   };
+  let registerButtonMarkUp =
+    status === "LOADING" ? (
+      <Loader />
+    ) : (
+      <button type="submit" className={styles.formButton}>
+        Register
+      </button>
+    );
 
   return (
     <div className={styles.formContainer}>
@@ -77,9 +86,7 @@ const RegisterForm = ({ setIsOpen, signupUser, status, error }) => {
           By creating an account you agree to the Terms of Service and Privacy
           Policy.
         </div>
-        <button type="submit" className={styles.formButton}>
-          Register
-        </button>
+        {registerButtonMarkUp}
       </form>
     </div>
   );

@@ -8,6 +8,7 @@ import {
   SIGNUP_ERROR,
   RESET_USER_STATUS,
   RESET_USER_ERROR,
+  LOGIN_ERROR,
 } from "../types";
 import { LOADING, IDLE, ERROR, SUCCESS } from "../../constants/uiState";
 const initialState = {
@@ -47,6 +48,21 @@ export default function (state = initialState, action) {
     case SIGNUP_ERROR: {
       return {
         ...state,
+        status: ERROR,
+        error: action.payload,
+      };
+    }
+    case LOGIN_REQUEST: {
+      return {
+        ...state,
+        status: LOADING,
+        error: initialState.error,
+      };
+    }
+    case LOGIN_ERROR: {
+      return {
+        ...state,
+        status: ERROR,
         error: action.payload,
       };
     }

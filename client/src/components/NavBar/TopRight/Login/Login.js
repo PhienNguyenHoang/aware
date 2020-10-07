@@ -1,38 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 
+import { resetUserError } from "../../../../redux/actions/userActions";
 import Modal from "react-modal";
 import LoginForm from "./LoginForm/LoginForm";
 
 import styles from "./Login.module.css";
-import { connect } from "react-redux";
-import {
-  closeLoginModal,
-  openLoginModal,
-} from "../../../../redux/actions/loginActions";
 
-const Login = ({ login: { isOpenModal }, closeLoginModal, openLoginModal }) => {
+const Login = ({ user: { status, error }, resetUserError }) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    resetUserError();
+    setIsOpen(false);
+  };
   return (
     <div>
-      <button className={styles.Button} onClick={openLoginModal}>
+      <button className={styles.Button} onClick={handleOpenModal}>
         Login
       </button>
       <Modal
-        isOpen={isOpenModal}
+        isOpen={modalIsOpen}
         ariaHideApp={false}
-        onRequestClose={closeLoginModal}
+        onRequestClose={handleCloseModal}
         className={styles.Modal}
         overlayClassName="Overlay"
       >
-        <LoginForm closeLoginModal={closeLoginModal} />
+        <LoginForm setIsOpen={setIsOpen} status={status} error={error} />
       </Modal>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  login: state.login,
+  user: state.user,
 });
 
-export default connect(mapStateToProps, { openLoginModal, closeLoginModal })(
-  Login
-);
+export default connect(mapStateToProps, { resetUserError })(Login);
