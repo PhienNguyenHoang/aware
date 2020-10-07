@@ -4,7 +4,6 @@ import userReducer from "./reducers/userReducer";
 import categoryReducer from "./reducers/categoryReducer";
 import productReducer from "./reducers/productReducer";
 import cartReducer from "./reducers/cartReducer";
-import loginReducer from "./reducers/loginReducer";
 import orderReducer from "./reducers/orderReducer";
 const initialState = {};
 
@@ -15,7 +14,6 @@ const reducers = combineReducers({
   category: categoryReducer,
   product: productReducer,
   cart: cartReducer,
-  // login: loginReducer,
   order: orderReducer
 });
 

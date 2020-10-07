@@ -4,14 +4,12 @@ import { nanoid } from "nanoid";
 import { createAnOrder, deleteUserCart } from "../../firebase/firebase";
 import NavBar from "../../components/NavBar/NavBar";
 import ProductInCart from "../../components/ProductInCart/ProductInCart";
-import { openLoginModal } from "../../redux/actions/loginActions";
 import { clearCart } from "../../redux/actions/cartActions";
 import "./Cart.css";
 
 const Cart = ({
   cart: { products },
   user: { authenticated, credentials },
-  openLoginModal,
   clearCart,
 }) => {
   let totalAmount = 0;
@@ -33,7 +31,7 @@ const Cart = ({
   });
   const handleCheckOut = async () => {
     if (!authenticated) {
-      openLoginModal();
+      alert('Please login before checking out')
     } else {
       const orderDetails = {
         products: products,
@@ -95,4 +93,4 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps, { openLoginModal, clearCart })(Cart);
+export default connect(mapStateToProps, { clearCart })(Cart);
