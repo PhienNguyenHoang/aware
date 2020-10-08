@@ -9,6 +9,7 @@ import {
   SIGNUP_ERROR,
   RESET_USER_STATUS,
   RESET_USER_ERROR,
+  LOGIN_ERROR,
 } from "../types";
 import { FBIdToken } from "../../constants/localStorage";
 
@@ -37,12 +38,25 @@ export const signupUserError = (dispatch, error) => {
 };
 export const loginUser = (userData) => async (dispatch) => {
   try {
+    loginUserRequest(dispatch);
     const returnedData = await axios.post("/login", userData);
     setAuthorizationHeader(returnedData.data.token);
     dispatch(getUserData());
   } catch (error) {
     console.log(error);
+    loginUserError(dispatch, error.response.data);
   }
+};
+export const loginUserRequest = (dispatch) => {
+  dispatch({
+    type: LOGIN_REQUEST,
+  });
+};
+export const loginUserError = (dispatch, error) => {
+  dispatch({
+    type: LOGIN_ERROR,
+    payload: error,
+  });
 };
 
 export const loginAdmin = (adminLoginData, history) => async (dispatch) => {
@@ -57,11 +71,6 @@ export const resetUserStatus = (dispatch) => {
       type: RESET_USER_STATUS,
     });
   }, 3000);
-};
-export const getUserDataRequest = (dispatch) => {
-  dispatch({
-    type: GET_USER_REQUEST,
-  });
 };
 export const resetUserError = () => (dispatch) => {
   dispatch({
@@ -82,6 +91,11 @@ export const getUserData = () => async (dispatch) => {
   } catch (error) {
     throw error;
   }
+};
+export const getUserDataRequest = (dispatch) => {
+  dispatch({
+    type: GET_USER_REQUEST,
+  });
 };
 
 export const logoutUser = () => async (dispatch) => {
