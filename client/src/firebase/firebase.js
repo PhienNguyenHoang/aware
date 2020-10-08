@@ -2,11 +2,6 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { forEach as pForEach } from "p-iteration";
 import config from "./config";
-import {
-  MARK_COMPLETE_SUCCESS,
-  MARK_COMPLETE_REQUEST,
-  MARK_COMPLETE_ERROR,
-} from "../redux/types";
 
 !firebase.apps.length && firebase.initializeApp(config);
 
@@ -30,8 +25,8 @@ export const getAllProductsByCustomerTypeAndType = async (
     if (type) {
       query = query.where("type", "==", type);
     }
-    const products = await query.get();
     if (filterOptions.length > 0) {
+      const products = await query.get();
       products.forEach((doc) => {
         getProductArray.push(doc);
       });
@@ -59,9 +54,149 @@ export const getAllProductsByCustomerTypeAndType = async (
       });
       return productList;
     } else {
+      const products = await query.orderBy("createdAt").limit(2).get();
       products.forEach((item) => {
         productList.push(item.data());
       });
+      return productList;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getProductNextPage = async (
+  customerType,
+  type,
+  categoryChosen,
+  filterConditions,
+  lastCreatedAt
+) => {
+  try {
+    let productList = [];
+    let getProductArray = [];
+    const filterOptions = Object.keys(filterConditions);
+    let query = firestore
+      .collection("products")
+      .where("customerType", "==", customerType);
+    if (categoryChosen) {
+      query = query.where("category", "==", categoryChosen);
+    }
+    if (type) {
+      query = query.where("type", "==", type);
+    }
+    if (filterOptions.length > 0) {
+      const products = await query.get();
+      products.forEach((doc) => {
+        getProductArray.push(doc);
+      });
+      await pForEach(getProductArray, async (doc) => {
+        let variations = firestore
+          .collection("products")
+          .doc(doc.id)
+          .collection("variations");
+        filterOptions.forEach((item) => {
+          variations = variations.where(item, "==", filterConditions[item]);
+        });
+        let variationsDocs = await variations.get();
+        let productName = [];
+        variationsDocs.forEach((variationsDoc) => {
+          productName.push(variationsDoc.data().name);
+        });
+        let uniqueProductName = [...new Set(productName)];
+        if (uniqueProductName.length > 0) {
+          const toBePushedProduct = await firestore
+            .collection("products")
+            .doc(uniqueProductName[0])
+            .get();
+          productList.push(toBePushedProduct.data());
+        }
+      });
+      return productList;
+    } else {
+      const products = await query
+        .orderBy("createdAt")
+        .startAfter(lastCreatedAt)
+        .limit(2)
+        .get();
+      products.forEach((item) => {
+        productList.push(item.data());
+      });
+      return productList;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getPreviousPage = async (
+  customerType,
+  type,
+  categoryChosen,
+  filterConditions,
+  firstCreatedAt
+) => {
+  try {
+    let productList = [];
+    let getProductArray = [];
+    const filterOptions = Object.keys(filterConditions);
+    let query = firestore
+      .collection("products")
+      .where("customerType", "==", customerType);
+    if (categoryChosen) {
+      query = query.where("category", "==", categoryChosen);
+    }
+    if (type) {
+      query = query.where("type", "==", type);
+    }
+    if (filterOptions.length > 0) {
+      const products = await query.get();
+      products.forEach((doc) => {
+        getProductArray.push(doc);
+      });
+      await pForEach(getProductArray, async (doc) => {
+        let variations = firestore
+          .collection("products")
+          .doc(doc.id)
+          .collection("variations");
+        filterOptions.forEach((item) => {
+          variations = variations.where(item, "==", filterConditions[item]);
+        });
+        let variationsDocs = await variations.get();
+        let productName = [];
+        variationsDocs.forEach((variationsDoc) => {
+          productName.push(variationsDoc.data().name);
+        });
+        let uniqueProductName = [...new Set(productName)];
+        if (uniqueProductName.length > 0) {
+          const toBePushedProduct = await firestore
+            .collection("products")
+            .doc(uniqueProductName[0])
+            .get();
+          productList.push(toBePushedProduct.data());
+        }
+      });
+      return productList;
+    } else {
+      const products = await query
+        .orderBy("createdAt", 'desc')
+        .startAfter(firstCreatedAt)
+        .limit(2)
+        .get();
+      products.forEach((item) => {
+        productList.push(item.data());
+      });
+      const compare = (a, b) => {
+        const created1 = a.createdAt;
+        const created2 = b.createdAt;
+        let comparison = 0;
+        if(created1 > created2){
+          comparison = 1;
+        }
+        else if (created1 < created2) {
+          comparison = -1
+        }
+        return comparison;
+      }
+      productList.sort(compare)
       return productList;
     }
   } catch (error) {
@@ -322,6 +457,6 @@ export const markOrderComplete = async (orderId) => {
       throw "Order does not exist";
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
