@@ -14,10 +14,14 @@ const UserBox = (props) => {
   const { name } = props;
   const dispatch = useDispatch();
   const history = useHistory();
+  if(name){
+    var nameMarkUp = [...name].splice(0,1)
+
+  }
   return (
     <Fragment>
       <div className="user-box-dropdown">
-        {name ? <div className="user-box">{name}</div> : <Loader />}
+        {name ? <div className="user-box">{nameMarkUp}</div> : <Loader />}
         <div className="user-dropdown-content">
           <button
             className="user-dropdown-button"

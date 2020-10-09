@@ -48,7 +48,7 @@ const NavBar = () => {
                 <a href="/product?ct=ladies&t=bottom" className="anchor">
                   Bottoms
                 </a>
-                <a href="/product?ct=ladies&t=dress" className="anchor">
+                <a href="/product?ct=ladies&t=dress&page=1" className="anchor">
                   Dresses
                 </a>
                 <a href="/product?ct=ladies&t=jacket" className="anchor">
