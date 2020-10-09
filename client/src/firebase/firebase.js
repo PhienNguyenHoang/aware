@@ -54,7 +54,7 @@ export const getAllProductsByCustomerTypeAndType = async (
       });
       return productList;
     } else {
-      const products = await query.orderBy("createdAt").limit(2).get();
+      const products = await query.orderBy("createdAt").limit(20).get();
       products.forEach((item) => {
         productList.push(item.data());
       });
@@ -116,7 +116,7 @@ export const getProductNextPage = async (
       const products = await query
         .orderBy("createdAt")
         .startAfter(lastCreatedAt)
-        .limit(2)
+        .limit(20)
         .get();
       products.forEach((item) => {
         productList.push(item.data());
@@ -179,7 +179,7 @@ export const getPreviousPage = async (
       const products = await query
         .orderBy("createdAt", 'desc')
         .startAfter(firstCreatedAt)
-        .limit(2)
+        .limit(20)
         .get();
       products.forEach((item) => {
         productList.push(item.data());
