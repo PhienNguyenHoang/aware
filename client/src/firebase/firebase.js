@@ -177,7 +177,7 @@ export const getPreviousPage = async (
       return productList;
     } else {
       const products = await query
-        .orderBy("createdAt", 'desc')
+        .orderBy("createdAt", "desc")
         .startAfter(firstCreatedAt)
         .limit(20)
         .get();
@@ -188,15 +188,14 @@ export const getPreviousPage = async (
         const created1 = a.createdAt;
         const created2 = b.createdAt;
         let comparison = 0;
-        if(created1 > created2){
+        if (created1 > created2) {
           comparison = 1;
-        }
-        else if (created1 < created2) {
-          comparison = -1
+        } else if (created1 < created2) {
+          comparison = -1;
         }
         return comparison;
-      }
-      productList.sort(compare)
+      };
+      productList.sort(compare);
       return productList;
     }
   } catch (error) {
@@ -457,6 +456,21 @@ export const markOrderComplete = async (orderId) => {
       throw "Order does not exist";
     }
   } catch (error) {
-    console.log(error);
+    alert(error);
+  }
+};
+export const markOrderCanceled = async (orderId) => {
+  try {
+    const checkExist = (await firestore.collection("orders").doc(orderId).get())
+      .exists;
+    if (checkExist) {
+      await firestore.collection("orders").doc(orderId).update({
+        status: "canceled",
+      });
+    } else {
+      throw "Order does not exist";
+    }
+  } catch (error) {
+    throw error;
   }
 };
