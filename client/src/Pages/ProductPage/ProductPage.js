@@ -22,9 +22,9 @@ import { filter } from "p-iteration";
 const ProductPage = ({ location, history }) => {
   const [filterConditions, setFilterConditions] = useState({});
   let params = new URLSearchParams(location.search);
+  const page = params.get("page");
   const customerType = params.get("ct");
   const type = params.get("t");
-  const page = params.get("page");
   const dispatch = useDispatch();
   const onClickCategory = (chosenCategory) => {
     dispatch(chooseCategory(chosenCategory));

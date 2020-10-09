@@ -1,0 +1,42 @@
+.dashboard-card-container {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 12px 24px;
+    position: relative;
+}
+.card-product-details-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.card-product-details-container img {
+    height: 40px;
+    width: 30px;
+    margin-right: 16px;
+}
+.card-product-details {
+    height: 40px;
+}
+.card-product-details-name {
+    font-size: 14px;
+    font-weight: 500
+}
+.card-product-details-small {
+    font-size: 12px;
+    font-weight: 500;
+    color: #acacac;
+}
+
+.card-createdAt {
+    font-size: 14px;
+    font-weight: 500;
+    position: absolute;
+    right: 468px
+}
+.card-action-button {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0px
+}

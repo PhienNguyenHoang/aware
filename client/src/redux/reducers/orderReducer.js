@@ -1,31 +1,63 @@
-import { SET_ORDER, MARK_COMPLETE_SUCCESS, MARK_COMPLETE_REQUEST } from "../types";
-import { LOADING, IDLE, SUCCESS, ERROR} from  '../../constants/uiState'
+import {
+  MARK_ORDER_STATUS_SUCCESS,
+  MARK_ORDER_STATUS_REQUEST,
+  MARK_ORDER_STATUS_ERROR,
+  SET_ORDER_SUCCESS,
+  SET_ORDER_REQUEST,
+  SET_ORDER_ERROR,
+} from "../types";
+import { LOADING, IDLE, SUCCESS, ERROR } from "../../constants/uiState";
 
 const initialState = {
   orders: [],
-  orderReducerStatus: IDLE
-
+  orderReducerStatus: IDLE,
+  error: "",
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_ORDER:
+    case SET_ORDER_REQUEST: {
+      return {
+        ...state,
+        orderReducerStatus: LOADING,
+        error: initialState.error,
+      };
+    }
+    case SET_ORDER_SUCCESS:
       return {
         ...state,
         orders: action.payload,
+        orderReducerStatus: SUCCESS,
+        error: initialState.error,
       };
-      case MARK_COMPLETE_REQUEST: {
-        return {
-          ...state,
-          orderReducerStatus: LOADING
-        }
-      }
-      case MARK_COMPLETE_SUCCESS: {
-        return {
-          ...state,
-          orderReducerStatus: SUCCESS
-        }
-      }
+    case SET_ORDER_ERROR: {
+      return {
+        ...state,
+        orderReducerStatus: ERROR,
+        error: action.payload,
+      };
+    }
+    case MARK_ORDER_STATUS_REQUEST: {
+      return {
+        ...state,
+        orderReducerStatus: LOADING,
+        error: initialState.error,
+      };
+    }
+    case MARK_ORDER_STATUS_SUCCESS: {
+      return {
+        ...state,
+        orderReducerStatus: SUCCESS,
+        error: initialState.error,
+      };
+    }
+    case MARK_ORDER_STATUS_ERROR: {
+      return {
+        ...state,
+        orderReducerStatus: ERROR,
+        error: action.payload,
+      };
+    }
     default:
       return state;
   }

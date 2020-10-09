@@ -2,9 +2,15 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getProduct } from "../../../redux/actions/productActions";
 import { getAllProduct } from "../../../firebase/firebase";
-import "./ProductTab.css";
+import logo from "../../../Images/logo.png";
+import AdminDashboardMenu from "../../../components/AdminDashboardMenu/AdminDashboardMenu";
+import AdminNavBar from "../../../components/AdminNavBar/AdminNavBar";
 import DashboardProductCard from "./DashboardProductCard/DashboardProductCard";
-const ProductTab = ({ getProduct, product, handleClick }) => {
+import plus from "../../../Images/plus-white.png";
+import "./ProductTab.css";
+const ProductTab = ({ getProduct, product: {products}, location }) => {
+  let params = new URLSearchParams(location.search);
+  const page = params.get("page");
   useEffect(() => {
     const fetchData = async () => {
       const fetchProduct = await getAllProduct();
@@ -12,29 +18,46 @@ const ProductTab = ({ getProduct, product, handleClick }) => {
     };
     fetchData();
   }, []);
-  const { products } = product;
-  console.log(products);
-  let productMarkUp = products.map((item) => (
+  let productMarkUp = products.map((item, index) => (
     <DashboardProductCard
+      key={index}
+      index={index}
       name={item.name}
       customerType={item.customerType}
       category={item.category}
       createdAt={item.createdAt}
+      imageUrl={item.imageUrl}
     />
   ));
 
   return (
-    <div className="product-tab-container">
-      <div className="second-bar">
-          <button onClick={() => {handleClick('Add product')}}>add product</button>
+    <div className="dashboard-container">
+      <div className="dashboard-menu">
+        <div className="admin-logo-container">
+          <img alt="" src={logo} />
         </div>
-      <div className="row">
-        <span className="row-product">PRODUCT</span>
-        <span className="row-sold">SOLD</span>
-        <span className="row-date">DATE ADDED</span>
-        <span className="row-profit">PROFIT($)</span>
+        <AdminDashboardMenu />
       </div>
-      {productMarkUp}
+      <div className="dashboard-content">
+        <AdminNavBar />
+        <div className="content-box">
+          <div className="product-tab-container">
+            <div className="second-bar">
+              <img src={plus} alt="" />
+              <a href="/admin/dashboard/add-product">
+                <button>Add product</button>
+              </a>
+            </div>
+            <div className="row">
+              <span className="row-product">PRODUCT</span>
+              <span className="row-sold">SOLD</span>
+              <span className="row-date">DATE ADDED</span>
+              <span className="row-profit">PROFIT($)</span>
+            </div>
+            {productMarkUp}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

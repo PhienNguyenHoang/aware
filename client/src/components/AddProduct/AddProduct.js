@@ -5,6 +5,9 @@ import {
   getAllCategory,
   getAllBrand,
 } from "../../firebase/firebase";
+import logo from "../../Images/logo.png";
+import AdminDashboardMenu from "../AdminDashboardMenu/AdminDashboardMenu";
+import AdminNavBar from "../AdminNavBar/AdminNavBar";
 import "./AddProduct.css";
 const AddProduct = () => {
   let categoryList = [];
@@ -61,19 +64,19 @@ const AddProduct = () => {
     { value: "jacket", label: "Jackets" },
   ];
   const resetHooks = () => {
-    setName('');
-    setPrice('');
-    setQuantity('');
-    setSex('');
-    setType('');
+    setName("");
+    setPrice("");
+    setQuantity("");
+    setSex("");
+    setType("");
     setCategory([]);
     setColor([]);
     setSize([]);
-    setBrand('');
-  }
+    setBrand("");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("hello")
+    console.log("hello");
     const colorArray = [];
     const sizeArray = [];
     color.forEach((item) => {
@@ -96,121 +99,132 @@ const AddProduct = () => {
     resetHooks();
   };
   return (
-    <div className="add-product-container">
-      <form onSubmit={handleSubmit}>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Name</div>
-          <input
-            value={name}
-            className="add-product-input-field"
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          />
+    <div className="dashboard-container">
+      <div className="dashboard-menu">
+        <div className="admin-logo-container">
+          <img alt="" src={logo} />
         </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Category</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="category"
-            options={categoryOptions}
-            value={category}
-            onChange={setCategory}
-          />
+        <AdminDashboardMenu />
+      </div>
+      <div className="dashboard-content">
+        <AdminNavBar />
+        <div className="add-product-container">
+          <form onSubmit={handleSubmit}>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Name</div>
+              <input
+                value={name}
+                className="add-product-input-field"
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Category</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="category"
+                options={categoryOptions}
+                value={category}
+                onChange={setCategory}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Brand</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="Brand"
+                value={brand}
+                options={brandOptions}
+                onChange={setBrand}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Price</div>
+              <input
+                value={price}
+                className="add-product-input-field"
+                onChange={(event) => {
+                  setPrice(event.target.value);
+                }}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Size</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="Size"
+                isMulti
+                value={size}
+                options={sizeOptions}
+                onChange={setSize}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Colors</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="Colors"
+                isMulti
+                value={color}
+                options={colorOptions}
+                onChange={setColor}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Sex</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="Sex"
+                value={sex}
+                options={sexOptions}
+                onChange={setSex}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Type</div>
+              {/* <input className="add-product-input-field" /> */}
+              <Select
+                className="Select-name"
+                id="Select"
+                placeholder="Type"
+                value={type}
+                options={typeOptions}
+                onChange={setType}
+              />
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">Quantity</div>
+              <input
+                value={quantity}
+                className="add-product-input-field"
+                onChange={(event) => {
+                  setQuantity(event.target.value);
+                }}
+              />
+            </div>
+            <div className="add-product-button-container">
+              <div className="add-product-button-white">
+                <button onClick={resetHooks}>Cancel</button>
+              </div>
+              <div className="add-product-button-orange">
+                <button type="submit">Complete</button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Brand</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="Brand"
-            value={brand}
-            options={brandOptions}
-            onChange={setBrand}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Price</div>
-          <input
-            value={price}
-            className="add-product-input-field"
-            onChange={(event) => {
-              setPrice(event.target.value);
-            }}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Size</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="Size"
-            isMulti
-            value={size}
-            options={sizeOptions}
-            onChange={setSize}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Colors</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="Colors"
-            isMulti
-            value={color}
-            options={colorOptions}
-            onChange={setColor}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Sex</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="Sex"
-            value={sex}
-            options={sexOptions}
-            onChange={setSex}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Type</div>
-          {/* <input className="add-product-input-field" /> */}
-          <Select
-            className="Select-name"
-            id="Select"
-            placeholder="Type"
-            value={type}
-            options={typeOptions}
-            onChange={setType}
-          />
-        </div>
-        <div className="add-product-input-container">
-          <div className="add-product-title">Quantity</div>
-          <input
-            value={quantity}
-            className="add-product-input-field"
-            onChange={(event) => {
-              setQuantity(event.target.value);
-            }}
-          />
-        </div>
-        <div className="add-product-button-container">
-          <div className="add-product-button-white">
-            <button onClick={resetHooks}>Cancel</button>
-          </div>
-          <div className="add-product-button-orange">
-            <button type="submit">Complete</button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
