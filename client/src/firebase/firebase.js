@@ -1,12 +1,25 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/storage";
 import { forEach as pForEach } from "p-iteration";
+import {
+  CUSTOMERTYPE,
+  PRODUCTS,
+  CATEGORY,
+  TYPE,
+  VARIATIONS,
+  CREATEDAT,
+  NAME,
+  CART,
+  USERNAME,
+  ORDERS,
+} from "../constants/firebaseContant";
 import config from "./config";
 
 !firebase.apps.length && firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
-const PAGE_LIMIT = 1;
+const PAGE_LIMIT = 10;
 export const getAllProductsByCustomerTypeAndType = async (
   customerType,
   type,
@@ -18,17 +31,23 @@ export const getAllProductsByCustomerTypeAndType = async (
     let productList = [];
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
-    let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * PAGE_LIMIT;
+    let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * PAGE_LIMIT; // minus one to match array's index
     let query = firestore
-      .collection("products")
-      .where("customerType", "==", customerType);
+      .collection(PRODUCTS)
+      .where(CUSTOMERTYPE, "==", customerType);
     if (categoryChosen) {
-      query = query.where("category", "==", categoryChosen);
+      query = query.where(CATEGORY, "==", categoryChosen);
     }
     if (type) {
-      query = query.where("type", "==", type);
+      query = query.where(TYPE, "==", type);
     }
-    if (filterOptions.length > 0) {
+    const hasFilter = (obj) => {
+      const filter = Object.keys(obj).reduce((prev, cur) => {
+        return prev || !!obj[cur];
+      }, false);
+      return filter;
+    };
+    if (hasFilter(filterConditions)) {
       const products = await query.get();
       let filtersAppliedProducts = [];
       products.forEach((doc) => {
@@ -36,24 +55,27 @@ export const getAllProductsByCustomerTypeAndType = async (
       });
       await pForEach(getProductArray, async (doc) => {
         let variations = firestore
-          .collection("products")
+          .collection(PRODUCTS)
           .doc(doc.id)
-          .collection("variations");
+          .collection(VARIATIONS);
         filterOptions.forEach((item) => {
-          variations = variations.where(item, "==", filterConditions[item]);
+          if (filterConditions[item]) {
+            variations = variations.where(item, "==", filterConditions[item]);
+          }
         });
         let variationsDocs = await variations.get();
         if (variationsDocs.size > 0) {
           filtersAppliedProducts.push(doc.data());
         }
       });
+      //up until now we already have an array of docs that meet the filter conditions
       return filtersAppliedProducts.slice(
+        //get docs begin from index productCursor which is equals to (page-1)*limit
         productCursor,
-        productCursor + PAGE_LIMIT
+        productCursor + PAGE_LIMIT //stop at "limit" amount of docs
       );
     } else {
       const producstSnapshot = await query.orderBy("createdAt").get();
-      console.log("producstSnapshot", producstSnapshot);
       const productAnchor =
         producstSnapshot.docs[
           productCursor <= producstSnapshot.docs.length - 1
@@ -87,13 +109,13 @@ export const getProductNextPage = async (
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
     let query = firestore
-      .collection("products")
-      .where("customerType", "==", customerType);
+      .collection(PRODUCTS)
+      .where(CUSTOMERTYPE, "==", customerType);
     if (categoryChosen) {
-      query = query.where("category", "==", categoryChosen);
+      query = query.where(CATEGORY, "==", categoryChosen);
     }
     if (type) {
-      query = query.where("type", "==", type);
+      query = query.where(TYPE, "==", type);
     }
     if (filterOptions.length > 0) {
       const products = await query.get();
@@ -102,9 +124,9 @@ export const getProductNextPage = async (
       });
       await pForEach(getProductArray, async (doc) => {
         let variations = firestore
-          .collection("products")
+          .collection(PRODUCTS)
           .doc(doc.id)
-          .collection("variations");
+          .collection(VARIATIONS);
         filterOptions.forEach((item) => {
           variations = variations.where(item, "==", filterConditions[item]);
         });
@@ -116,7 +138,7 @@ export const getProductNextPage = async (
         let uniqueProductName = [...new Set(productName)];
         if (uniqueProductName.length > 0) {
           const toBePushedProduct = await firestore
-            .collection("products")
+            .collection(PRODUCTS)
             .doc(uniqueProductName[0])
             .get();
           productList.push(toBePushedProduct.data());
@@ -125,7 +147,7 @@ export const getProductNextPage = async (
       return productList;
     } else {
       const products = await query
-        .orderBy("createdAt")
+        .orderBy(CREATEDAT)
         .startAfter(lastCreatedAt)
         .limit(20)
         .get();
@@ -150,13 +172,13 @@ export const getPreviousPage = async (
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
     let query = firestore
-      .collection("products")
-      .where("customerType", "==", customerType);
+      .collection(PRODUCTS)
+      .where(CUSTOMERTYPE, "==", customerType);
     if (categoryChosen) {
-      query = query.where("category", "==", categoryChosen);
+      query = query.where(CATEGORY, "==", categoryChosen);
     }
     if (type) {
-      query = query.where("type", "==", type);
+      query = query.where(TYPE, "==", type);
     }
     if (filterOptions.length > 0) {
       const products = await query.get();
@@ -165,9 +187,9 @@ export const getPreviousPage = async (
       });
       await pForEach(getProductArray, async (doc) => {
         let variations = firestore
-          .collection("products")
+          .collection(PRODUCTS)
           .doc(doc.id)
-          .collection("variations");
+          .collection(VARIATIONS);
         filterOptions.forEach((item) => {
           variations = variations.where(item, "==", filterConditions[item]);
         });
@@ -179,7 +201,7 @@ export const getPreviousPage = async (
         let uniqueProductName = [...new Set(productName)];
         if (uniqueProductName.length > 0) {
           const toBePushedProduct = await firestore
-            .collection("products")
+            .collection(PRODUCTS)
             .doc(uniqueProductName[0])
             .get();
           productList.push(toBePushedProduct.data());
@@ -188,7 +210,7 @@ export const getPreviousPage = async (
       return productList;
     } else {
       const products = await query
-        .orderBy("createdAt", "desc")
+        .orderBy(CREATEDAT, "desc")
         .startAfter(firstCreatedAt)
         .limit(20)
         .get();
@@ -217,7 +239,7 @@ export const getPreviousPage = async (
 export const getAllBrand = async () => {
   try {
     const brandList = [];
-    const query = await firestore.collection("products");
+    const query = await firestore.collection(PRODUCTS);
     const productRef = await query.get();
     productRef.forEach((item) => {
       brandList.push(item.data().brand);
@@ -232,7 +254,7 @@ export const getAllBrand = async () => {
 export const getAllCategory = async () => {
   try {
     const categoryList = [];
-    const query = await firestore.collection("products");
+    const query = await firestore.collection(PRODUCTS);
     const productsRef = await query.get();
     productsRef.forEach((item) => {
       categoryList.push(item.data().category);
@@ -248,10 +270,10 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
   try {
     const categoryList = [];
     const query = firestore
-      .collection("products")
-      .where("customerType", "==", customterType);
+      .collection(PRODUCTS)
+      .where(CUSTOMERTYPE, "==", customterType);
     if (type) {
-      query.where("type", "==", type);
+      query.where(TYPE, "==", type);
     }
 
     const products = await query.get();
@@ -272,13 +294,13 @@ export const getOneProduct = async (productName) => {
     const colors = [];
     const sizes = [];
     const queryProduct = await firestore
-      .collection("products")
-      .where("name", "==", productName);
+      .collection(PRODUCTS)
+      .where(NAME, "==", productName);
     const product = await queryProduct.get();
     const queryVariation = await firestore
-      .collection("products")
+      .collection(PRODUCTS)
       .doc(productName)
-      .collection("variations")
+      .collection(VARIATIONS)
       .get();
     queryVariation.forEach((item) => {
       variations.push(item.data());
@@ -311,7 +333,7 @@ export const getOneProduct = async (productName) => {
 export const getAllProduct = async () => {
   try {
     const productList = [];
-    const products = await firestore.collection("products").get();
+    const products = await firestore.collection(PRODUCTS).get();
     products.forEach((item) => {
       productList.push(item.data());
     });
@@ -324,7 +346,7 @@ export const getAllProduct = async () => {
 export const addProduct = async (productDetails) => {
   try {
     const checkExist = await (
-      await firestore.collection("products").doc(productDetails.name).get()
+      await firestore.collection(PRODUCTS).doc(productDetails.name).get()
     ).exists;
     if (checkExist) {
       throw "Product already exists";
@@ -347,7 +369,7 @@ export const addProduct = async (productDetails) => {
         };
         firestore
           .doc(`/products/${productDetails.name}`)
-          .collection("variations")
+          .collection(VARIATIONS)
           .add(productVariations);
       });
     });
@@ -359,12 +381,12 @@ export const addProduct = async (productDetails) => {
 export const addProductToCart = async (cartData) => {
   try {
     const checkExist = (
-      await firestore.collection("cart").doc(cartData.userId).get()
+      await firestore.collection(CART).doc(cartData.userId).get()
     ).exists;
     if (checkExist) {
       if (cartData.product.color && cartData.product.size) {
         await firestore
-          .collection("cart")
+          .collection(CART)
           .doc(cartData.userId)
           .update({
             products: firebase.firestore.FieldValue.arrayUnion(
@@ -381,7 +403,7 @@ export const addProductToCart = async (cartData) => {
           username: cartData.username,
           products: [cartData.product],
         };
-        await firestore.collection("cart").doc(cartData.userId).set(cartObj);
+        await firestore.collection(CART).doc(cartData.userId).set(cartObj);
         alert("added succesfully");
       } else {
         alert("Please select the size and color you want!");
@@ -396,8 +418,8 @@ export const getCart = async (username) => {
   try {
     let cartData = {};
     const query = await firestore
-      .collection("cart")
-      .where("username", "==", username)
+      .collection(CART)
+      .where(USERNAME, "==", username)
       .get();
     query.forEach((item) => {
       cartData.products = item.data().products;
@@ -411,7 +433,7 @@ export const getCart = async (username) => {
 export const getAllOrder = async () => {
   try {
     let orderList = [];
-    const query = await firestore.collection("orders").get();
+    const query = await firestore.collection(ORDERS).get();
     query.forEach((item) => {
       orderList.push(item.data());
     });
@@ -434,7 +456,7 @@ export const createAnOrder = async (orderDetails) => {
     };
     if (orderObject.products && orderObject.userId) {
       await firestore
-        .collection("orders")
+        .collection(ORDERS)
         .doc(orderDetails.orderId)
         .set(orderObject);
     }
@@ -445,10 +467,10 @@ export const createAnOrder = async (orderDetails) => {
 };
 export const deleteUserCart = async (userId) => {
   try {
-    const checkExist = (await firestore.collection("cart").doc(userId).get())
+    const checkExist = (await firestore.collection(CART).doc(userId).get())
       .exists;
     if (checkExist) {
-      await firestore.collection("cart").doc(userId).delete();
+      await firestore.collection(CART).doc(userId).delete();
     }
   } catch (error) {
     console.log(error);
@@ -457,10 +479,10 @@ export const deleteUserCart = async (userId) => {
 
 export const markOrderComplete = async (orderId) => {
   try {
-    const checkExist = (await firestore.collection("orders").doc(orderId).get())
+    const checkExist = (await firestore.collection(ORDERS).doc(orderId).get())
       .exists;
     if (checkExist) {
-      await firestore.collection("orders").doc(orderId).update({
+      await firestore.collection(ORDERS).doc(orderId).update({
         status: "complete",
       });
     } else {
@@ -472,10 +494,10 @@ export const markOrderComplete = async (orderId) => {
 };
 export const markOrderCanceled = async (orderId) => {
   try {
-    const checkExist = (await firestore.collection("orders").doc(orderId).get())
+    const checkExist = (await firestore.collection(ORDERS).doc(orderId).get())
       .exists;
     if (checkExist) {
-      await firestore.collection("orders").doc(orderId).update({
+      await firestore.collection(ORDERS).doc(orderId).update({
         status: "canceled",
       });
     } else {

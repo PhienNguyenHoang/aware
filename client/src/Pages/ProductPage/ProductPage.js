@@ -20,11 +20,13 @@ import NavBar from "../../components/NavBar/NavBar";
 import { useState } from "react";
 import { filter } from "p-iteration";
 const ProductPage = ({ location, history }) => {
-  const [filterConditions, setFilterConditions] = useState({});
   let params = new URLSearchParams(location.search);
-  const page = params.get("page");
+  const page = params.get("page") || 1;
   const customerType = params.get("ct");
   const type = params.get("t");
+  const size = params.get('size');
+  const color = params.get('color');
+  const [filterConditions, setFilterConditions] = useState({size: size, color: color});
   const dispatch = useDispatch();
   const onClickCategory = (chosenCategory) => {
     dispatch(chooseCategory(chosenCategory));
@@ -76,7 +78,8 @@ const ProductPage = ({ location, history }) => {
   }
   const uniqueColorList = [...new Set(colorList)];
   // console.log(products[products.length - 1])
-
+  console.log(filterConditions)
+  console.log(products)
   const handleNextPage = async () => {
     //  console.log(params.set('page', Number(page)+1));
     const string = location.search;

@@ -63,7 +63,8 @@ const AddProduct = () => {
     { value: "dress", label: "Dresses" },
     { value: "jacket", label: "Jackets" },
   ];
-  const resetHooks = () => {
+  const resetHooks = (event) => {
+    event.preventDefault();
     setName("");
     setPrice("");
     setQuantity("");
@@ -109,9 +110,18 @@ const AddProduct = () => {
       <div className="dashboard-content">
         <AdminNavBar />
         <div className="add-product-container">
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="add-product-input-container">
-              <div className="add-product-title">Name</div>
+              <div className="add-product-title customize-add-product-photo-container ">PHOTOS</div>
+              <div className="grid grid-cols-4 gap-4 customize-home-container">
+                <div className="col-span-1 customize-add-product-photo"></div>
+                <div className="col-span-1 customize-add-product-photo"></div>
+                <div className="col-span-1 customize-add-product-photo"></div>
+                <div className="col-span-1 customize-add-product-photo"></div>
+              </div>
+            </div>
+            <div className="add-product-input-container">
+              <div className="add-product-title">NAME</div>
               <input
                 value={name}
                 className="add-product-input-field"
@@ -121,7 +131,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Category</div>
+              <div className="add-product-title">CATEGORY</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -133,7 +143,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Brand</div>
+              <div className="add-product-title">BRAND</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -145,7 +155,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Price</div>
+              <div className="add-product-title">PRICE</div>
               <input
                 value={price}
                 className="add-product-input-field"
@@ -155,7 +165,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Size</div>
+              <div className="add-product-title">SIZE</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -168,7 +178,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Colors</div>
+              <div className="add-product-title">COLORS</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -181,7 +191,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Sex</div>
+              <div className="add-product-title">SEX</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -193,7 +203,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Type</div>
+              <div className="add-product-title">TYPE</div>
               {/* <input className="add-product-input-field" /> */}
               <Select
                 className="Select-name"
@@ -205,7 +215,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="add-product-input-container">
-              <div className="add-product-title">Quantity</div>
+              <div className="add-product-title">QUANTITY</div>
               <input
                 value={quantity}
                 className="add-product-input-field"
@@ -219,7 +229,7 @@ const AddProduct = () => {
                 <button onClick={resetHooks}>Cancel</button>
               </div>
               <div className="add-product-button-orange">
-                <button type="submit">Complete</button>
+                <button onClick={handleSubmit}>Complete</button>
               </div>
             </div>
           </form>

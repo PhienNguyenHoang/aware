@@ -1,6 +1,7 @@
 import React from "react";
+import {withRouter} from 'react-router-dom'
 import "./SizeBox.css";
-const SizeBox = ({ size, isActive, toggleCss }) => {
+const SizeBox = ({ size, isActive, toggleCss, location }) => {
   // const [classCss, setClassCss] = useState('')
   // const handleClick = () => {
   //     if(classCss == 'size-box-container-checked'){
@@ -10,6 +11,12 @@ const SizeBox = ({ size, isActive, toggleCss }) => {
   //         setClassCss('size-box-container-checked')
   //     }
   // }
+  console.log(location)
+  const setQueryParams = () => {
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("size", size);
+    window.location.search = searchParams;
+  }
   return (
     <div
       className={`size-box-container ${
@@ -17,10 +24,11 @@ const SizeBox = ({ size, isActive, toggleCss }) => {
       }`}
       onClick={() => {
         toggleCss(size);
+        setQueryParams()
       }}
     >
       {size}
     </div>
   );
 };
-export default SizeBox;
+export default withRouter(SizeBox);

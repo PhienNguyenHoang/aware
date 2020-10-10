@@ -1,0 +1,10 @@
+export const CUSTOMERTYPE = "customerType";
+export const PRODUCTS = "products";
+export const CATEGORY = "category";
+export const TYPE = "type";
+export const VARIATIONS = "variations";
+export const CREATEDAT = "createdAt";
+export const NAME = "name";
+export const CART = "cart";
+export const USERNAME = "username";
+export const ORDERS = "orders";

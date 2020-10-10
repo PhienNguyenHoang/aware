@@ -3,6 +3,9 @@
   height: 95%;
   padding: 90px 180px 0 180px;
 }
+.add-product-container form {
+  height: 95%;
+}
 .add-product-input-container {
   width: 100%;
   display: flex;
@@ -20,9 +23,10 @@
   width: 50px;
   display: flex;
   justify-content: flex-end;
+  font-size: 12px;
+  font-weight: bold;
 }
 .add-product-button-container {
-  width: 100%;
   display: flex;
   justify-content: flex-end;
   
@@ -64,4 +68,9 @@
 }
 .Select-name {
   border: none;
+}
+.customize-add-product-photo {
+  width: 180px;
+  height: 270px;
+  background-color: #ffff;
 }
