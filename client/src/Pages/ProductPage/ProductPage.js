@@ -43,12 +43,13 @@ const ProductPage = ({ location, history }) => {
         customerType,
         type,
         categoryChosen,
-        filterConditions
+        filterConditions,
+        page
       );
       dispatch(getProduct(products));
     };
     fetchData();
-  }, [categoryChosen, filterConditions]);
+  }, [categoryChosen, customerType, dispatch, filterConditions, page, type]);
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
       name={item}
@@ -66,27 +67,38 @@ const ProductPage = ({ location, history }) => {
     />
   ));
   const colorList = [];
-  products.forEach((item) => {
-    colorList.push(...item.color);
-  });
+  if (products.length > 0) {
+    products.forEach((item) => {
+      if (item) {
+        colorList.push(...item.color);
+      }
+    });
+  }
   const uniqueColorList = [...new Set(colorList)];
   // console.log(products[products.length - 1])
-  
+
   const handleNextPage = async () => {
     //  console.log(params.set('page', Number(page)+1));
-    const string  = location.search;
-    const string2 = string.split('=')
-    string2[string2.length - 1] = String(Number(string2[string2.length - 1]) + 1);
-    const string3 = string2.join('=')
-    console.log(string3)
-    console.log(location.search)
-     
+    const string = location.search;
+    const string2 = string.split("=");
+    string2[string2.length - 1] = String(
+      Number(string2[string2.length - 1]) + 1
+    );
+    const string3 = string2.join("=");
+    console.log(string3);
+    console.log(location.search);
+
     // window.location.search = params
-    console.log(params)
+    console.log(params);
     // if (history.pushState) {
-      let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + string3
-      window.history.pushState({path:newurl},'',newurl);
-  // }
+    let newurl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname +
+      string3;
+    window.history.pushState({ path: newurl }, "", newurl);
+    // }
     if (products.length > 0) {
       const lastCreatedAt = products[products.length - 1].createdAt;
       const productsNextPage = await getProductNextPage(

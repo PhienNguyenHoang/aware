@@ -6,16 +6,19 @@ import config from "./config";
 !firebase.apps.length && firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
+const PAGE_LIMIT = 1;
 export const getAllProductsByCustomerTypeAndType = async (
   customerType,
   type,
   categoryChosen,
-  filterConditions
+  filterConditions,
+  page
 ) => {
   try {
     let productList = [];
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
+    let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * PAGE_LIMIT;
     let query = firestore
       .collection("products")
       .where("customerType", "==", customerType);
@@ -27,6 +30,7 @@ export const getAllProductsByCustomerTypeAndType = async (
     }
     if (filterOptions.length > 0) {
       const products = await query.get();
+      let filtersAppliedProducts = [];
       products.forEach((doc) => {
         getProductArray.push(doc);
       });
@@ -39,22 +43,29 @@ export const getAllProductsByCustomerTypeAndType = async (
           variations = variations.where(item, "==", filterConditions[item]);
         });
         let variationsDocs = await variations.get();
-        let productName = [];
-        variationsDocs.forEach((variationsDoc) => {
-          productName.push(variationsDoc.data().name);
-        });
-        let uniqueProductName = [...new Set(productName)];
-        if (uniqueProductName.length > 0) {
-          const toBePushedProduct = await firestore
-            .collection("products")
-            .doc(uniqueProductName[0])
-            .get();
-          productList.push(toBePushedProduct.data());
+        if (variationsDocs.size > 0) {
+          filtersAppliedProducts.push(doc.data());
         }
       });
-      return productList;
+      return filtersAppliedProducts.slice(
+        productCursor,
+        productCursor + PAGE_LIMIT
+      );
     } else {
-      const products = await query.orderBy("createdAt").limit(20).get();
+      const producstSnapshot = await query.orderBy("createdAt").get();
+      console.log("producstSnapshot", producstSnapshot);
+      const productAnchor =
+        producstSnapshot.docs[
+          productCursor <= producstSnapshot.docs.length - 1
+            ? productCursor
+            : producstSnapshot.docs.length - 1
+        ];
+
+      const products = await query
+        .orderBy("createdAt")
+        .startAfter(productAnchor.data().createdAt)
+        .limit(PAGE_LIMIT)
+        .get();
       products.forEach((item) => {
         productList.push(item.data());
       });
