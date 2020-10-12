@@ -171,7 +171,7 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
 export const getOneProduct = async (productName) => {
   try {
     let productObj = {};
-    console.log("hello")
+    console.log("hello");
     const productList = [];
     const variations = [];
     const colors = [];
@@ -213,13 +213,40 @@ export const getOneProduct = async (productName) => {
   }
 };
 
-export const getAllProduct = async () => {
+export const getAllProduct = async (page) => {
   try {
+    console.log(page)
     const productList = [];
-    const products = await firestore.collection(PRODUCTS).get();
-    products.forEach((item) => {
-      productList.push(item.data());
-    });
+    let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * 5; // minus one to match array's index
+
+    // const products = await firestore.collection(PRODUCTS).orderBy(CREATEDAT).limit(5).get();
+    const query = firestore.collection(PRODUCTS);
+    const producstSnapshot = await query.orderBy("createdAt").get();
+    if (producstSnapshot.size > 0) {
+      const productAnchor =
+        producstSnapshot.docs[
+          productCursor <= producstSnapshot.docs.length - 1
+            ? productCursor
+            : producstSnapshot.docs.length - 1
+        ];
+
+      let products;
+      const productsQuery = query.orderBy("createdAt");
+      console.log(producstSnapshot.docs.length - 1)
+      console.log(productCursor)
+      if (productCursor <= producstSnapshot.docs.length - 1) {
+        console.log("hello")
+        products = await productsQuery
+          .startAt(productAnchor.data().createdAt)
+          .limit(5)
+          .get();
+      } else {
+        return productList;
+      }
+      products.forEach((item) => {
+        productList.push(item.data());
+      });
+    }
     return productList;
   } catch (error) {
     console.log(error);
@@ -282,14 +309,14 @@ export const uploadImages = async (files) => {
   //   });
   // }
   await pForEach(files, async (item) => {
-     await storage.ref(`/images/${item.name}`).put(item);
+    await storage.ref(`/images/${item.name}`).put(item);
     // uploadTask.on("state_changed", console.log, console.error, async () => {
-      console.log("hello")
-      const result = await storage
-        .ref("images")
-        .child(item.name)
-        .getDownloadURL();
-      urlArray.push(result);
+    console.log("hello");
+    const result = await storage
+      .ref("images")
+      .child(item.name)
+      .getDownloadURL();
+    urlArray.push(result);
     // });
   });
   return urlArray;

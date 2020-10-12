@@ -13,7 +13,7 @@ const ProductTab = ({ getProduct, product: {products}, location }) => {
   const page = params.get("page");
   useEffect(() => {
     const fetchData = async () => {
-      const fetchProduct = await getAllProduct();
+      const fetchProduct = await getAllProduct(page);
       getProduct(fetchProduct);
     };
     fetchData();
