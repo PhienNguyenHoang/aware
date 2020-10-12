@@ -12,6 +12,7 @@ import { getProduct } from "../../redux/actions/productActions";
 import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
 import { useState } from "react";
+import Loader from "../../components/Loader/Loader";
 const ProductPage = ({ location, history }) => {
   let params = new URLSearchParams(location.search);
   const page = params.get("page") || 1;
@@ -57,14 +58,22 @@ const ProductPage = ({ location, history }) => {
       type={type}
     />
   ));
-  let productListMarkUp = products.map((item, index) => (
+  // let productListMarkUp = products.map((item, index) => (
+  //   <ProductList
+  //     key={index}
+  //     name={item.name}
+  //     price={item.price}
+  //     imageUrl={item.imageUrl}
+  //   />
+  // ));
+  let productListMarkUp = products.length > 0 ? (products.map((item, index) => (
     <ProductList
       key={index}
       name={item.name}
       price={item.price}
       imageUrl={item.imageUrl}
     />
-  ));
+  ))) : (<Loader />)
   const colorList = [];
   if (products.length > 0) {
     products.forEach((item) => {
@@ -121,7 +130,7 @@ const ProductPage = ({ location, history }) => {
               <span>{customerType}</span> / <span>{type}</span>
             </div>
           </div>
-          <div className="product-panel-flex">{productListMarkUp}</div>
+          <div className={products.length > 0 ? "product-panel-flex" : "product-panel-flex-loading"}>{productListMarkUp}</div>
         </div>
       </div>
     </div>
