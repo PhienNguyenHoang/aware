@@ -15,7 +15,7 @@ const DashboardProductCard = ({
   return (
     <div className="dashboard-card-container" style={index % 2 == 0 ? null : {backgroundColor: "#f6f6f6"}}>
       <div className="card-product-details-container">
-        <img src={imageUrl} alt="" />
+        <img src={imageUrl[0]} alt="" />
         <div className="card-product-details">
           {/* {name} {customerType} {category} */}
           <div className="card-product-details-name">{name}</div>
