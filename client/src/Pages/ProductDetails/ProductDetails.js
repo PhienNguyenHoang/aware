@@ -101,7 +101,7 @@ const ProductDetails = ({
   if(Object.keys(product).length > 0){
     console.log(product.imageUrl[0])
   } 
-  let imageMarkUp = Object.keys(product).length > 0 ? <img src={product.imageUrl[1]} alt="" /> : null
+  let imageMarkUp = Object.keys(product).length > 0 ? <img src={product.imageUrl[0]} alt="" /> : null
   return (
     <div className="product-details-outer-container">
       <NavBar />
