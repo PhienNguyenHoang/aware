@@ -70,7 +70,34 @@
   border: none;
 }
 .customize-add-product-photo {
-  width: 180px;
+  width: 183px;
   height: 270px;
   background-color: #ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.customize-add-product-photo:hover {
+  transform: scale(1.05);
+}
+.customize-add-product-photo-containter {
+  width: 780px;
+}
+.add-product-icon-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 200px;
+}
+.add-product-icon-container img {
+  width: 24px;
+  height: 24px
+}
+.add-product-icon {
+  margin-left: 25px;
+}
+.product-preview-image {
+  width: 183px;
+  height: 270px;
 }

@@ -18,7 +18,7 @@ const Cart = ({
   let productInCartMarkUp = products.map((product, index) => (
     <ProductInCart
       key={index}
-      imageUrl={product.imageUrl}
+      imageUrl={product.imageUrl[0]}
       name={product.name}
       color={product.color}
       size={product.size}

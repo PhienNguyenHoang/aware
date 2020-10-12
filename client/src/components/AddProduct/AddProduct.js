@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { forEach as pForEach } from "p-iteration";
+
 import {
   addProduct,
   getAllCategory,
   getAllBrand,
+  storage,
+  uploadImages,
 } from "../../firebase/firebase";
 import logo from "../../Images/logo.png";
+import add from "../../Images/add.png";
 import AdminDashboardMenu from "../AdminDashboardMenu/AdminDashboardMenu";
 import AdminNavBar from "../AdminNavBar/AdminNavBar";
 import "./AddProduct.css";
@@ -14,6 +19,7 @@ const AddProduct = () => {
   let brandList = [];
   let [categoryOptions, setCategoryOptions] = useState([]);
   let [brandOptions, setBrandOptions] = useState([]);
+  let imageUrls = [];
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -23,7 +29,12 @@ const AddProduct = () => {
   const [color, setColor] = useState("");
   const [sex, setSex] = useState("");
   const [type, setType] = useState("");
-
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
+  const [file, setFile] = useState([]);
+  const [url, setURL] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const returnCategory = await getAllCategory();
@@ -63,8 +74,7 @@ const AddProduct = () => {
     { value: "dress", label: "Dresses" },
     { value: "jacket", label: "Jackets" },
   ];
-  const resetHooks = (event) => {
-    event.preventDefault();
+  const resetHooks = () => {
     setName("");
     setPrice("");
     setQuantity("");
@@ -77,13 +87,43 @@ const AddProduct = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("hello");
     const colorArray = [];
     const sizeArray = [];
     color.forEach((item) => {
       colorArray.push(item.value);
     });
     size.forEach((item) => sizeArray.push(item.value));
+    // await pForEach(file, async (item) => {
+    //   console.log("hello");
+    //   const uploadTask = storage.ref(`/images/${item.name}`).put(item);
+    //   uploadTask.on("state_changed", console.log, console.error, () => {
+      //     storage
+      //       .ref("images")
+    //       .child(item.name)
+    //       .getDownloadURL()
+    //       .then((fileUrl) => {
+    //         console.log(fileUrl);
+    //         imageUrlArray.push(fileUrl);
+    //         console.log(imageUrlArray);
+    //       });
+    //   });
+    // });
+    // for (const item of file) {
+      //   const uploadTask = storage.ref(`/images/${item.name}`).put(item);
+      //   uploadTask.on("state_changed", console.log, console.error, () => {
+    //     storage
+    //       .ref("images")
+    //       .child(item.name)
+    //       .getDownloadURL()
+    //       .then((fileUrl) => {
+      //         console.log(fileUrl);
+      //         imageUrlArray.push(fileUrl);
+      //         console.log(imageUrlArray);
+      //       });
+    //   });
+    // }
+    let imageUrlArray = await uploadImages(file);
+    console.log(imageUrlArray);
     let ProductObject = {
       name: name,
       category: category.value,
@@ -94,11 +134,104 @@ const AddProduct = () => {
       amount: quantity,
       customerType: sex.value,
       type: type.value,
+      imageUrl: imageUrlArray,
     };
     await addProduct(ProductObject);
-    alert("Product added succesfully");
+    // alert("Product added succesfully");
     resetHooks();
   };
+  let markUp1 = image1 ? (
+    <div className="col-span-1 customize-add-product-photo">
+      <img src={image1} alt="" className="product-preview-image" />
+    </div>
+  ) : (
+    <label htmlFor="input">
+      <div className="col-span-1 customize-add-product-photo">
+        <div className="add-product-icon-container">
+          <input
+            type="file"
+            id="input"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setImage1(URL.createObjectURL(e.target.files[0]));
+              setFile([...file, e.target.files[0]]);
+            }}
+          />
+          <img src={add} alt="" className="add-product-icon" />
+          <span>Add photo</span>
+        </div>
+      </div>
+    </label>
+  );
+  let markUp2 = image2 ? (
+    <div className="col-span-1 customize-add-product-photo">
+      <img src={image2} alt="" className="product-preview-image" />
+    </div>
+  ) : (
+    <label htmlFor="input">
+      <div className="col-span-1 customize-add-product-photo">
+        <div className="add-product-icon-container">
+          <input
+            type="file"
+            id="input"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setImage2(URL.createObjectURL(e.target.files[0]));
+              setFile([...file, e.target.files[0]]);
+            }}
+          />
+          <img src={add} alt="" className="add-product-icon" />
+          <span>Add photo</span>
+        </div>
+      </div>
+    </label>
+  );
+  let markUp3 = image3 ? (
+    <div className="col-span-1 customize-add-product-photo">
+      <img src={image3} alt="" className="product-preview-image" />
+    </div>
+  ) : (
+    <label htmlFor="input">
+      <div className="col-span-1 customize-add-product-photo">
+        <div className="add-product-icon-container">
+          <input
+            type="file"
+            id="input"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setImage3(URL.createObjectURL(e.target.files[0]));
+              setFile([...file, e.target.files[0]]);
+            }}
+          />
+          <img src={add} alt="" className="add-product-icon" />
+          <span>Add photo</span>
+        </div>
+      </div>
+    </label>
+  );
+  let markUp4 = image4 ? (
+    <div className="col-span-1 customize-add-product-photo">
+      <img src={image4} alt="" className="product-preview-image" />
+    </div>
+  ) : (
+    <label htmlFor="input">
+      <div className="col-span-1 customize-add-product-photo">
+        <div className="add-product-icon-container">
+          <input
+            type="file"
+            id="input"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setImage4(URL.createObjectURL(e.target.files[0]));
+              setFile([...file, e.target.files[0]]);
+            }}
+          />
+          <img src={add} alt="" className="add-product-icon" />
+          <span>Add photo</span>
+        </div>
+      </div>
+    </label>
+  );
   return (
     <div className="dashboard-container">
       <div className="dashboard-menu">
@@ -112,12 +245,25 @@ const AddProduct = () => {
         <div className="add-product-container">
           <form>
             <div className="add-product-input-container">
-              <div className="add-product-title customize-add-product-photo-container ">PHOTOS</div>
-              <div className="grid grid-cols-4 gap-4 customize-home-container">
-                <div className="col-span-1 customize-add-product-photo"></div>
-                <div className="col-span-1 customize-add-product-photo"></div>
-                <div className="col-span-1 customize-add-product-photo"></div>
-                <div className="col-span-1 customize-add-product-photo"></div>
+              <div className="add-product-title">PHOTOS</div>
+              <div className="grid grid-cols-4 gap-4 customize-add-product-photo-container">
+                {/* <label htmlFor="input">
+                  <div className="col-span-1 customize-add-product-photo">
+                    <div className="add-product-icon-container">
+                      <input
+                        type="file"
+                        id="input"
+                        style={{ display: "none" }}
+                      />
+                      <img src={add} alt="" className="add-product-icon" />
+                      <span>Add photo</span>
+                    </div>
+                  </div>
+                </label> */}
+                {markUp1}
+                {markUp2}
+                {markUp3}
+                {markUp4}
               </div>
             </div>
             <div className="add-product-input-container">

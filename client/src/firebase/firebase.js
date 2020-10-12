@@ -20,6 +20,7 @@ import config from "./config";
 
 const firestore = firebase.firestore();
 const PAGE_LIMIT = 10;
+export const storage = firebase.storage();
 export const getAllProductsByCustomerTypeAndType = async (
   customerType,
   type,
@@ -170,6 +171,7 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
 export const getOneProduct = async (productName) => {
   try {
     let productObj = {};
+    console.log("hello")
     const productList = [];
     const variations = [];
     const colors = [];
@@ -232,6 +234,7 @@ export const addProduct = async (productDetails) => {
     if (checkExist) {
       throw "Product already exists";
     }
+    console.log(productDetails.imageUrl);
     const productDoc = {
       name: productDetails.name,
       customerType: productDetails.customerType,
@@ -239,6 +242,7 @@ export const addProduct = async (productDetails) => {
       type: productDetails.type,
       createdAt: new Date().toISOString(),
       price: productDetails.price,
+      imageUrl: [...productDetails.imageUrl],
     };
     await firestore.doc(`/products/${productDetails.name}`).set(productDoc);
     productDetails.colors.forEach((color) => {
@@ -255,8 +259,40 @@ export const addProduct = async (productDetails) => {
       });
     });
   } catch (error) {
-    alert(error);
+    console.log(error);
   }
+};
+export const uploadImages = async (files) => {
+  let urlArray = [];
+  console.log(files);
+  // for (const item of files) {
+  //   const uploadTask = storage.ref(`/images/${item.name}`).put(item);
+  //   uploadTask.on("state_changed", console.log, console.error, async () => {
+  //     // storage
+  //     //   .ref("images")
+  //     //   .child(item.name)
+  //     //   .getDownloadURL()
+  //     //   .then((fileUrl) => {
+  //     //     console.log(fileUrl);
+  //     //     imageUrlArray.push(fileUrl);
+  //     //     console.log(imageUrlArray);
+  //     //   });
+  //     const result = await storage.ref('images').child(item.name).getDownloadURL();
+  //     urlArray.push(result);
+  //   });
+  // }
+  await pForEach(files, async (item) => {
+     await storage.ref(`/images/${item.name}`).put(item);
+    // uploadTask.on("state_changed", console.log, console.error, async () => {
+      console.log("hello")
+      const result = await storage
+        .ref("images")
+        .child(item.name)
+        .getDownloadURL();
+      urlArray.push(result);
+    // });
+  });
+  return urlArray;
 };
 
 export const addProductToCart = async (cartData) => {
