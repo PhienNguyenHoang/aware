@@ -23,25 +23,26 @@ const PAGE_LIMIT = 10;
 export const getAllProductsByCustomerTypeAndType = async (
   customerType,
   type,
-  // categoryChosen,
   filterConditions,
   page
 ) => {
   try {
+    console.log("page", page);
+    console.log(type);
     let productList = [];
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
     let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * PAGE_LIMIT; // minus one to match array's index
     let query = firestore
-      .collection(PRODUCTS)
-      .where(CUSTOMERTYPE, "==", customerType);
-      console.log(!!filterConditions.category)
+      .collection("products")
+      .where("customerType", "==", customerType);
+    console.log(query);
     if (!!filterConditions.category) {
-      console.log("hello")
-      console.log(filterConditions.category)
+      console.log("hello");
+      console.log(filterConditions.category);
       query = query.where(CATEGORY, "==", filterConditions.category);
     }
-    if (type) {
+    if (!!type) {
       query = query.where(TYPE, "==", type);
     }
     const hasFilter = (obj) => {
@@ -50,9 +51,9 @@ export const getAllProductsByCustomerTypeAndType = async (
       }, false);
       return filter;
     };
-    console.log(query)
+    console.log(query);
     if (hasFilter(filterConditions)) {
-      console.log("hello")
+      console.log("hello");
       const products = await query.get();
       let filtersAppliedProducts = [];
       products.forEach((doc) => {
@@ -63,7 +64,7 @@ export const getAllProductsByCustomerTypeAndType = async (
           .collection(PRODUCTS)
           .doc(doc.id)
           .collection(VARIATIONS);
-        let categoryIndex = filterOptions.indexOf('category');
+        let categoryIndex = filterOptions.indexOf("category");
         filterOptions.splice(categoryIndex, 1);
         filterOptions.forEach((item) => {
           if (filterConditions[item]) {
@@ -72,7 +73,7 @@ export const getAllProductsByCustomerTypeAndType = async (
         });
         let variationsDocs = await variations.get();
         if (variationsDocs.size > 0) {
-          console.log("size > 0")
+          console.log("size > 0");
           filtersAppliedProducts.push(doc.data());
         }
       });
@@ -83,23 +84,27 @@ export const getAllProductsByCustomerTypeAndType = async (
         productCursor + PAGE_LIMIT //stop at "limit" amount of docs
       );
     } else {
+      console.log(query);
       const producstSnapshot = await query.orderBy("createdAt").get();
-      const productAnchor =
-        producstSnapshot.docs[
-          productCursor <= producstSnapshot.docs.length - 1
-            ? productCursor
-            : producstSnapshot.docs.length - 1
-        ];
 
-      const products = await query
-        .orderBy("createdAt")
-        .startAt(productAnchor.data().createdAt)
-        .limit(PAGE_LIMIT)
-        .get();
-      products.forEach((item) => {
-        productList.push(item.data());
-      });
-      console.log("productList", productList)
+      if (producstSnapshot.size > 0) {
+        const productAnchor =
+          producstSnapshot.docs[
+            productCursor <= producstSnapshot.docs.length - 1
+              ? productCursor
+              : producstSnapshot.docs.length - 1
+          ];
+
+        const products = await query
+          .orderBy("createdAt")
+          .startAt(productAnchor.data().createdAt)
+          .limit(PAGE_LIMIT)
+          .get();
+        products.forEach((item) => {
+          productList.push(item.data());
+        });
+        console.log("productList", productList);
+      }
       return productList;
     }
   } catch (error) {
