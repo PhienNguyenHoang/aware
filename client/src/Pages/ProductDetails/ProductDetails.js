@@ -12,14 +12,17 @@ import SizeBox from "../../components/SizeBox/SizeBox";
 import { sortSize } from "../../util/sortSize";
 import ColorBox from "../../components/ColorBox/ColorBox";
 import "./ProductDetails.css";
+import { getSpecificProduct } from "../../redux/actions/productActions";
+import productReducer from "../../redux/reducers/productReducer";
 const ProductDetails = ({
   history,
   user: { authenticated, credentials },
-  addItemToCart, unAuthAddItemToCart
+  addItemToCart, unAuthAddItemToCart,
+  getSpecificProduct,
+  productReducer: {product}
 }) => {
   let productDetails, productPath, sizeBoxMarkUp, colorBoxMarkUp;
   const [quantity, setQuantity] = useState(1);
-  const [product, setProduct] = useState({});
   const [activeSize, setActiveSize] = useState("");
   const [activeColor, setActiveColor] = useState("");
   const productURL = history.location.pathname.split("/product/");
@@ -31,11 +34,14 @@ const ProductDetails = ({
     setQuantity((quantity) => quantity - 1);
   };
   useEffect(() => {
-    const fetchData = async () => {
-      productDetails = await getOneProduct(productName);
-      setProduct(productDetails);
-    };
-    fetchData();
+    // const fetchData = async () => {
+    //   // productDetails = await getOneProduct(productName);
+    //   // setProduct(productDetails);
+    //   // console.log(product)
+      
+    // };
+    // fetchData();
+    getSpecificProduct(productName);
   }, []);
   const toggleCssSize = (clickedItem) => {
     setActiveSize(clickedItem);
@@ -91,7 +97,11 @@ const ProductDetails = ({
       unAuthAddItemToCart(productObj);
     }
   };
-
+  console.log(product.imageUrl)
+  if(Object.keys(product).length > 0){
+    console.log(product.imageUrl[0])
+  } 
+  let imageMarkUp = Object.keys(product).length > 0 ? <img src={product.imageUrl[1]} alt="" /> : null
   return (
     <div className="product-details-outer-container">
       <NavBar />
@@ -100,7 +110,8 @@ const ProductDetails = ({
         <div className="grid grid-cols-4 gap-4 customize-container">
           <div className="col-span-1 customize "></div>
           <div className="col-span-1 customize-product-image">
-            <img src={product.imageUrl} alt="" />
+            {/* <img src={product.imageUrl} alt="" /> */}
+            {imageMarkUp}
           </div>
           <div className="col-span-1 customize-product-info">
             <div className="product-details-name">{product.name}</div>
@@ -140,8 +151,9 @@ const ProductDetails = ({
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  productReducer: state.product
 });
 
-const mapActionsToProps = { addItemToCart, unAuthAddItemToCart };
+const mapActionsToProps = { addItemToCart, unAuthAddItemToCart, getSpecificProduct };
 
 export default connect(mapStateToProps, mapActionsToProps)(ProductDetails);

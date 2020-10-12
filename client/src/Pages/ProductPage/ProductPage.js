@@ -12,7 +12,6 @@ import { getProduct } from "../../redux/actions/productActions";
 import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
 import { useState } from "react";
-import { filter } from "p-iteration";
 const ProductPage = ({ location, history }) => {
   let params = new URLSearchParams(location.search);
   const page = params.get("page") || 1;
