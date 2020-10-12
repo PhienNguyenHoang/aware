@@ -9,9 +9,11 @@ const ProductFilter = ({
   setFilterConditions,
   colorList,
   filterConditions,
+  sizeQueryParam,
+  colorQueryParam
 }) => {
-  const [openSize, setOpenSize] = useState(false);
-  const [openColor, setOpenColor] = useState(false);
+  const [openSize, setOpenSize] = useState(!!sizeQueryParam);
+  const [openColor, setOpenColor] = useState(!!colorQueryParam);
   const [openBrand, setOpenBrand] = useState(false);
   const [openPrice, setOpenPrice] = useState(false);
   const [openAvailable, setOpenAvailable] = useState(false);
@@ -22,7 +24,6 @@ const ProductFilter = ({
     if (openSize) {
       setOpenSize(false);
       setActiveSize("");
-      setFilterConditions({});
     } else {
       setOpenSize(true);
     }
@@ -31,7 +32,6 @@ const ProductFilter = ({
     if (openColor) {
       setOpenColor(false);
       setActiveColor("");
-      setFilterConditions({});
     } else {
       setOpenColor(true);
     }
@@ -111,7 +111,7 @@ const ProductFilter = ({
       </div>
       <div
         className={
-          openColor ? "color-dropdown-content-open" : "color-dropdown-content"
+          openColor  ? "color-dropdown-content-open" : "color-dropdown-content"
         }
       >
         {colorBoxMarkup}

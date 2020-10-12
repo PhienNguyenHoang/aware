@@ -11,7 +11,8 @@ const SizeBox = ({ size, isActive, toggleCss, location }) => {
   //         setClassCss('size-box-container-checked')
   //     }
   // }
-  console.log(location)
+  let params = new URLSearchParams(location.search) 
+  const sizeChecked = params.get('size');
   const setQueryParams = () => {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.set("size", size);
@@ -20,7 +21,7 @@ const SizeBox = ({ size, isActive, toggleCss, location }) => {
   return (
     <div
       className={`size-box-container ${
-        isActive ? "size-box-container-checked" : ""
+        sizeChecked === size ? "size-box-container-checked" : ""
       }`}
       onClick={() => {
         toggleCss(size);

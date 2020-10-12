@@ -9,11 +9,7 @@ import {
 import ProductList from "../../components/ProductList/ProductList";
 import ProductFilter from "../../components/ProductFilter/ProductFilter";
 import ProductCategory from "../../components/ProductCategory/ProductCategory";
-import {
-  getCategory,
-  chooseCategory,
-  clearChosenCategory,
-} from "../../redux/actions/categoryActions";
+import { getCategory } from "../../redux/actions/categoryActions";
 import { getProduct } from "../../redux/actions/productActions";
 import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
@@ -24,16 +20,21 @@ const ProductPage = ({ location, history }) => {
   const page = params.get("page") || 1;
   const customerType = params.get("ct");
   const type = params.get("t");
-  const size = params.get('size');
-  const color = params.get('color');
-  const [filterConditions, setFilterConditions] = useState({size: size, color: color});
+  const size = params.get("size");
+  const color = params.get("color");
+  const categoryQuery = params.get("category");
+  const [filterConditions, setFilterConditions] = useState({
+    size: size,
+    color: color,
+    category: categoryQuery,
+  });
   const dispatch = useDispatch();
-  const onClickCategory = (chosenCategory) => {
-    dispatch(chooseCategory(chosenCategory));
-  };
+  // const onClickCategory = (chosenCategory) => {
+  //   dispatch(chooseCategory(chosenCategory));
+  // };
   const { products } = useSelector((state) => state.product);
   const category = useSelector((state) => state.category);
-  const { categories, categoryChosen } = category;
+  const { categories } = category;
   useEffect(() => {
     const fetchData = async () => {
       const categories = await getCategoryByCustomerTypeAndType(
@@ -44,19 +45,18 @@ const ProductPage = ({ location, history }) => {
       const products = await getAllProductsByCustomerTypeAndType(
         customerType,
         type,
-        categoryChosen,
         filterConditions,
         page
       );
       dispatch(getProduct(products));
     };
     fetchData();
-  }, [categoryChosen, customerType, dispatch, filterConditions, page, type]);
+  }, [customerType, dispatch, filterConditions, page, type]);
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
       name={item}
       key={item}
-      onClickCategory={onClickCategory}
+      // onClickCategory={onClickCategory}
       type={type}
     />
   ));
@@ -77,11 +77,8 @@ const ProductPage = ({ location, history }) => {
     });
   }
   const uniqueColorList = [...new Set(colorList)];
-  // console.log(products[products.length - 1])
-  console.log(filterConditions)
-  console.log(products)
+  console.log(products);
   const handleNextPage = async () => {
-    //  console.log(params.set('page', Number(page)+1));
     const string = location.search;
     const string2 = string.split("=");
     string2[string2.length - 1] = String(
@@ -91,9 +88,7 @@ const ProductPage = ({ location, history }) => {
     console.log(string3);
     console.log(location.search);
 
-    // window.location.search = params
     console.log(params);
-    // if (history.pushState) {
     let newurl =
       window.location.protocol +
       "//" +
@@ -101,13 +96,11 @@ const ProductPage = ({ location, history }) => {
       window.location.pathname +
       string3;
     window.history.pushState({ path: newurl }, "", newurl);
-    // }
     if (products.length > 0) {
       const lastCreatedAt = products[products.length - 1].createdAt;
       const productsNextPage = await getProductNextPage(
         customerType,
         type,
-        categoryChosen,
         filterConditions,
         lastCreatedAt
       );
@@ -120,7 +113,6 @@ const ProductPage = ({ location, history }) => {
       const productsPreviousPage = await getPreviousPage(
         customerType,
         type,
-        categoryChosen,
         filterConditions,
         firstCreatedAt
       );
@@ -138,7 +130,7 @@ const ProductPage = ({ location, history }) => {
           <div
             className="all-product"
             onClick={() => {
-              dispatch(clearChosenCategory());
+              setFilterConditions({ ...filterConditions, category: null });
             }}
           >
             All {type}
@@ -151,6 +143,8 @@ const ProductPage = ({ location, history }) => {
             setFilterConditions={setFilterConditions}
             customerType={customerType}
             type={type}
+            sizeQueryParam={size}
+            colorQueryParam={color}
           />
         </div>
         <div className="col-span-2 right-column" id="margin-left">
