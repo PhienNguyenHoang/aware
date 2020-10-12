@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryByCustomerTypeAndType,
   getAllProductsByCustomerTypeAndType,
-  getProductNextPage,
-  getPreviousPage,
 } from "../../firebase/firebase";
 import ProductList from "../../components/ProductList/ProductList";
 import ProductFilter from "../../components/ProductFilter/ProductFilter";
@@ -79,44 +77,15 @@ const ProductPage = ({ location, history }) => {
   const uniqueColorList = [...new Set(colorList)];
   console.log(products);
   const handleNextPage = async () => {
-    const string = location.search;
-    const string2 = string.split("=");
-    string2[string2.length - 1] = String(
-      Number(string2[string2.length - 1]) + 1
-    );
-    const string3 = string2.join("=");
-    console.log(string3);
-    console.log(location.search);
-
-    console.log(params);
-    let newurl =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname +
-      string3;
-    window.history.pushState({ path: newurl }, "", newurl);
-    if (products.length > 0) {
-      const lastCreatedAt = products[products.length - 1].createdAt;
-      const productsNextPage = await getProductNextPage(
-        customerType,
-        type,
-        filterConditions,
-        lastCreatedAt
-      );
-      dispatch(getProduct(productsNextPage));
-    }
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("page", Number(page) + 1);
+    window.location.search = searchParams;
   };
   const handlePreviousPage = async () => {
-    if (products.length) {
-      const firstCreatedAt = products[0].createdAt;
-      const productsPreviousPage = await getPreviousPage(
-        customerType,
-        type,
-        filterConditions,
-        firstCreatedAt
-      );
-      dispatch(getProduct(productsPreviousPage));
+    if (page > 1) {
+      let searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("page", Number(page) - 1);
+      window.location.search = searchParams;
     }
   };
   return (

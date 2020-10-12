@@ -95,154 +95,21 @@ export const getAllProductsByCustomerTypeAndType = async (
               : producstSnapshot.docs.length - 1
           ];
 
-        const products = await query
-          .orderBy("createdAt")
-          .startAt(productAnchor.data().createdAt)
-          .limit(PAGE_LIMIT)
-          .get();
+        let products;
+        const productsQuery = query.orderBy("createdAt");
+        if (productCursor <= producstSnapshot.docs.length - 1) {
+          products = await productsQuery
+            .startAt(productAnchor.data().createdAt)
+            .limit(PAGE_LIMIT)
+            .get();
+        } else {
+          return productList;
+        }
         products.forEach((item) => {
           productList.push(item.data());
         });
         console.log("productList", productList);
       }
-      return productList;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const getProductNextPage = async (
-  customerType,
-  type,
-  categoryChosen,
-  filterConditions,
-  lastCreatedAt
-) => {
-  try {
-    let productList = [];
-    let getProductArray = [];
-    const filterOptions = Object.keys(filterConditions);
-    let query = firestore
-      .collection(PRODUCTS)
-      .where(CUSTOMERTYPE, "==", customerType);
-    if (categoryChosen) {
-      query = query.where(CATEGORY, "==", categoryChosen);
-    }
-    if (type) {
-      query = query.where(TYPE, "==", type);
-    }
-    if (filterOptions.length > 0) {
-      const products = await query.get();
-      products.forEach((doc) => {
-        getProductArray.push(doc);
-      });
-      await pForEach(getProductArray, async (doc) => {
-        let variations = firestore
-          .collection(PRODUCTS)
-          .doc(doc.id)
-          .collection(VARIATIONS);
-        filterOptions.forEach((item) => {
-          variations = variations.where(item, "==", filterConditions[item]);
-        });
-        let variationsDocs = await variations.get();
-        let productName = [];
-        variationsDocs.forEach((variationsDoc) => {
-          productName.push(variationsDoc.data().name);
-        });
-        let uniqueProductName = [...new Set(productName)];
-        if (uniqueProductName.length > 0) {
-          const toBePushedProduct = await firestore
-            .collection(PRODUCTS)
-            .doc(uniqueProductName[0])
-            .get();
-          productList.push(toBePushedProduct.data());
-        }
-      });
-      return productList;
-    } else {
-      const products = await query
-        .orderBy(CREATEDAT)
-        .startAfter(lastCreatedAt)
-        .limit(20)
-        .get();
-      products.forEach((item) => {
-        productList.push(item.data());
-      });
-      return productList;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const getPreviousPage = async (
-  customerType,
-  type,
-  categoryChosen,
-  filterConditions,
-  firstCreatedAt
-) => {
-  try {
-    let productList = [];
-    let getProductArray = [];
-    const filterOptions = Object.keys(filterConditions);
-    let query = firestore
-      .collection(PRODUCTS)
-      .where(CUSTOMERTYPE, "==", customerType);
-    if (categoryChosen) {
-      query = query.where(CATEGORY, "==", categoryChosen);
-    }
-    if (type) {
-      query = query.where(TYPE, "==", type);
-    }
-    if (filterOptions.length > 0) {
-      const products = await query.get();
-      products.forEach((doc) => {
-        getProductArray.push(doc);
-      });
-      await pForEach(getProductArray, async (doc) => {
-        let variations = firestore
-          .collection(PRODUCTS)
-          .doc(doc.id)
-          .collection(VARIATIONS);
-        filterOptions.forEach((item) => {
-          variations = variations.where(item, "==", filterConditions[item]);
-        });
-        let variationsDocs = await variations.get();
-        let productName = [];
-        variationsDocs.forEach((variationsDoc) => {
-          productName.push(variationsDoc.data().name);
-        });
-        let uniqueProductName = [...new Set(productName)];
-        if (uniqueProductName.length > 0) {
-          const toBePushedProduct = await firestore
-            .collection(PRODUCTS)
-            .doc(uniqueProductName[0])
-            .get();
-          productList.push(toBePushedProduct.data());
-        }
-      });
-      return productList;
-    } else {
-      const products = await query
-        .orderBy(CREATEDAT, "desc")
-        .startAfter(firstCreatedAt)
-        .limit(20)
-        .get();
-      products.forEach((item) => {
-        productList.push(item.data());
-      });
-      const compare = (a, b) => {
-        const created1 = a.createdAt;
-        const created2 = b.createdAt;
-        let comparison = 0;
-        if (created1 > created2) {
-          comparison = 1;
-        } else if (created1 < created2) {
-          comparison = -1;
-        }
-        return comparison;
-      };
-      productList.sort(compare);
       return productList;
     }
   } catch (error) {
