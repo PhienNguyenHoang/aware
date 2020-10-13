@@ -13,7 +13,7 @@ import "./ProductPage.css";
 import NavBar from "../../components/NavBar/NavBar";
 import { useState } from "react";
 import Loader from "../../components/Loader/Loader";
-const ProductPage = ({ location, history }) => {
+const ProductPage = ({ location }) => {
   let params = new URLSearchParams(location.search);
   const page = params.get("page") || 1;
   const customerType = params.get("ct");
@@ -40,6 +40,7 @@ const ProductPage = ({ location, history }) => {
         type
       );
       dispatch(getCategory(categories));
+      console.log(filterConditions)
       const products = await getAllProductsByCustomerTypeAndType(
         customerType,
         type,
@@ -49,7 +50,7 @@ const ProductPage = ({ location, history }) => {
       dispatch(getProduct(products));
     };
     fetchData();
-  }, [customerType, dispatch, filterConditions, page, type]);
+  }, [filterConditions]);
   let categoriesMarkUp = categories.map((item) => (
     <ProductCategory
       name={item}
@@ -114,12 +115,9 @@ const ProductPage = ({ location, history }) => {
           </div>
           <div className="category-markup">{categoriesMarkUp}</div>
           <ProductFilter
-            className="product-filter-box"
             colorList={uniqueColorList}
             filterConditions={filterConditions}
             setFilterConditions={setFilterConditions}
-            customerType={customerType}
-            type={type}
             sizeQueryParam={size}
             colorQueryParam={color}
           />
