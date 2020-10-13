@@ -12,7 +12,7 @@ const AdminDashboardMenu = () => {
         <img alt="" src={overview} className="menu-icon" />
         Overview
       </div>
-      <a href="/admin/dashboard/orders">
+      <a href="/admin/dashboard/orders?page=1">
         <div
           className="menu-item"
         >

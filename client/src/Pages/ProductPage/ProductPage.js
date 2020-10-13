@@ -84,12 +84,12 @@ const ProductPage = ({ location, history }) => {
   }
   const uniqueColorList = [...new Set(colorList)];
   console.log(products);
-  const handleNextPage = async () => {
+  const handleNextPage = () => {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.set("page", Number(page) + 1);
     window.location.search = searchParams;
   };
-  const handlePreviousPage = async () => {
+  const handlePreviousPage = () => {
     if (page > 1) {
       let searchParams = new URLSearchParams(window.location.search);
       searchParams.set("page", Number(page) - 1);
