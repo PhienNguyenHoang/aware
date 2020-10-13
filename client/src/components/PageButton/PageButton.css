@@ -1,0 +1,34 @@
+.product-tab-page-button {
+    width: 32px;
+    height: 32px;
+    border: solid 1px #ededed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #3d3d3f;
+  }
+  .product-tab-page-button:hover {
+    width: 32px;
+    height: 32px;
+    border: solid 1px #ffa15f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #3d3d3f;
+  }
+  .product-tab-page-button-checked {
+    width: 32px;
+    height: 32px;
+    border: solid 1px #ffa15f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #ffa15f;
+    color: #ffff;
+  }

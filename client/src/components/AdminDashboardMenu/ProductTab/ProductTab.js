@@ -3,14 +3,28 @@ import { connect } from "react-redux";
 import { getProduct } from "../../../redux/actions/productActions";
 import { getAllProduct } from "../../../firebase/firebase";
 import logo from "../../../Images/logo.png";
+import prev from "../../../Images/prev.png";
+import next from "../../../Images/next.png";
 import AdminDashboardMenu from "../../../components/AdminDashboardMenu/AdminDashboardMenu";
 import AdminNavBar from "../../../components/AdminNavBar/AdminNavBar";
 import DashboardProductCard from "./DashboardProductCard/DashboardProductCard";
 import plus from "../../../Images/plus-white.png";
 import "./ProductTab.css";
-const ProductTab = ({ getProduct, product: {products}, location }) => {
+import PageButton from "../../PageButton/PageButton";
+const ProductTab = ({ getProduct, product: { products }, location }) => {
+  const pageArray = [1, 2, 3, 4, 5];
   let params = new URLSearchParams(location.search);
-  const page = params.get("page");
+  const page = params.get("page") || 1;
+  const handlePrevPage = () => {
+    if (page > 1) {
+      params.set("page", Number(page) - 1);
+      window.location.search = params;
+    }
+  };
+  const handleNextPage = () => {
+    params.set("page", Number(page) + 1);
+    window.location.search = params;
+  };
   useEffect(() => {
     const fetchData = async () => {
       const fetchProduct = await getAllProduct(page);
@@ -29,7 +43,9 @@ const ProductTab = ({ getProduct, product: {products}, location }) => {
       imageUrl={item.imageUrl}
     />
   ));
-
+  let pageMarkUp = pageArray.map((item, index) => (
+    <PageButton pageNum={item} key={index} tab={'products'} />
+  ));
   return (
     <div className="dashboard-container">
       <div className="dashboard-menu">
@@ -55,6 +71,15 @@ const ProductTab = ({ getProduct, product: {products}, location }) => {
               <span className="row-profit">PROFIT($)</span>
             </div>
             {productMarkUp}
+            <div className="product-tab-page-button-container">
+              <div className="product-tab-page-button" onClick={handlePrevPage}>
+                <img src={prev} alt="" />
+              </div>
+              {pageMarkUp}
+              <div className="product-tab-page-button" onClick={handleNextPage}>
+                <img src={next} alt="" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

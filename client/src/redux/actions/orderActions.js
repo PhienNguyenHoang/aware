@@ -13,14 +13,15 @@ import {
 } from "../../firebase/firebase";
 import ProductTab from "../../components/AdminDashboardMenu/ProductTab/ProductTab";
 
-export const setOrder = () => async (dispatch) => {
+export const setOrder = (page) => async (dispatch) => {
   // dispatch({
   //   type: SET_ORDER,
   //   payload: orders,
   // });
   try {
+    console.log("exec")
     setOrderRequest(dispatch);
-    const orders = await getAllOrder();
+    const orders = await getAllOrder(page);
     setOrderSuccess(dispatch, orders);
   } catch (error) {
     setOrderError(dispatch, error);
@@ -44,13 +45,14 @@ export const setOrderError = (dispatch, error) => {
   });
 };
 export const markComplete = (orderId) => async (dispatch) => {
-  markOrderStatusRequest(dispatch);
+  markOrderStatusRequest(dispatch, orderId);
   await markOrderComplete(orderId);
   markOrderStatusSucces(dispatch);
 };
-export const markOrderStatusRequest = (dispatch) => {
+export const markOrderStatusRequest = (dispatch, orderId) => {
   dispatch({
     type: MARK_ORDER_STATUS_REQUEST,
+    payload: orderId
   });
 };
 export const markOrderStatusSucces = (dispatch) => {
@@ -66,7 +68,7 @@ export const markOrderStatusError = (dispatch, error) => {
 };
 export const markCancel = (orderId) => async (dispatch) => {
   try {
-    markOrderStatusRequest(dispatch);
+    markOrderStatusRequest(dispatch, orderId);
     await markOrderCanceled(orderId);
     markOrderStatusSucces(dispatch);
   } catch (error) {

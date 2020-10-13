@@ -1,6 +1,7 @@
 .product-tab-container {
   width: 100%;
   height: 100%;
+  position: relative;;
 }
 .row {
   width: 100%;
@@ -34,11 +35,21 @@
   font-weight: 600;
 }
 .second-bar button:active {
-    transform: scale(1.03);
+  transform: scale(1.03);
 }
 .second-bar img {
-    position: absolute;
-    right: 125px;
-    cursor: pointer;
+  position: absolute;
+  right: 125px;
+  cursor: pointer;
+}
+
+.product-tab-page-button-container {
+  height: 32px;
+  margin-top: 50px;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
 }
 

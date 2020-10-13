@@ -2,6 +2,7 @@ import React from "react";
 import dropdown from "../../Images/dropdown.png";
 import "./OrderTabDetails.css";
 import Loader from "../Loader/Loader";
+import { useState } from "react";
 const OrderTabDetails = ({
   orderId,
   status,
@@ -11,7 +12,10 @@ const OrderTabDetails = ({
   handleMarkCancel,
   orderReducerStatus,
   index,
+  loadingOrder,
 }) => {
+  const [statusState, setStatusState] = useState(status);
+  console.log("unmount");
   let productMarkUp = products.map(
     (item) => `${item.name} (${item.size}) x ${item.quantity}`
   );
@@ -19,7 +23,7 @@ const OrderTabDetails = ({
   products.forEach((item) => {
     total += item.amount;
   });
-  let statusMarkUp = orderReducerStatus === "LOADING" ? <Loader /> : status;
+  let statusMarkUp = loadingOrder === orderId ? <Loader /> : statusState;
   return (
     <div
       className="order-tab-details-container"
@@ -31,11 +35,11 @@ const OrderTabDetails = ({
       <div className="order-tab-details-total">{total}</div>
       <div
         className={
-          status === "complete"
+          statusState === "complete"
             ? "order-tab-details-status-complete"
-            : status === "pending"
+            : statusState === "pending"
             ? "order-tab-details-status-pending"
-            : status === "canceled"
+            : statusState === "canceled"
             ? "order-tab-details-status-cancelled"
             : null
         }
@@ -50,7 +54,10 @@ const OrderTabDetails = ({
         <div className="action-button-dropdown-content">
           <button
             className="action-button-dropdown-content-button"
-            onClick={() => handleMarkComplete(orderId)}
+            onClick={() => {
+              handleMarkComplete(orderId);
+              setStatusState("complete")
+            }}
           >
             <div className="peagreen-oval"></div>
             <span>Mark as Complete</span>
@@ -59,6 +66,7 @@ const OrderTabDetails = ({
             className="action-button-dropdown-content-button"
             onClick={() => {
               handleMarkCancel(orderId);
+              setStatusState("canceled")
             }}
           >
             <div className="red-oval"></div>

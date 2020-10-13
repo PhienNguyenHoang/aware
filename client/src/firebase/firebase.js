@@ -28,8 +28,6 @@ export const getAllProductsByCustomerTypeAndType = async (
   page
 ) => {
   try {
-    console.log("page", page);
-    console.log(type);
     let productList = [];
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
@@ -37,10 +35,7 @@ export const getAllProductsByCustomerTypeAndType = async (
     let query = firestore
       .collection("products")
       .where("customerType", "==", customerType);
-    console.log(query);
     if (!!filterConditions.category) {
-      console.log("hello");
-      console.log(filterConditions.category);
       query = query.where(CATEGORY, "==", filterConditions.category);
     }
     if (!!type) {
@@ -52,9 +47,7 @@ export const getAllProductsByCustomerTypeAndType = async (
       }, false);
       return filter;
     };
-    console.log(query);
     if (hasFilter(filterConditions)) {
-      console.log("hello");
       const products = await query.get();
       let filtersAppliedProducts = [];
       products.forEach((doc) => {
@@ -74,7 +67,6 @@ export const getAllProductsByCustomerTypeAndType = async (
         });
         let variationsDocs = await variations.get();
         if (variationsDocs.size > 0) {
-          console.log("size > 0");
           filtersAppliedProducts.push(doc.data());
         }
       });
@@ -85,7 +77,6 @@ export const getAllProductsByCustomerTypeAndType = async (
         productCursor + PAGE_LIMIT //stop at "limit" amount of docs
       );
     } else {
-      console.log(query);
       const producstSnapshot = await query.orderBy("createdAt").get();
 
       if (producstSnapshot.size > 0) {
@@ -109,7 +100,6 @@ export const getAllProductsByCustomerTypeAndType = async (
         products.forEach((item) => {
           productList.push(item.data());
         });
-        console.log("productList", productList);
       }
       return productList;
     }
@@ -171,7 +161,6 @@ export const getCategoryByCustomerTypeAndType = async (customterType, type) => {
 export const getOneProduct = async (productName) => {
   try {
     let productObj = {};
-    console.log("hello");
     const productList = [];
     const variations = [];
     const colors = [];
@@ -215,7 +204,6 @@ export const getOneProduct = async (productName) => {
 
 export const getAllProduct = async (page) => {
   try {
-    console.log(page)
     const productList = [];
     let productCursor = parseInt(page) === 1 ? 0 : (page - 1) * 5; // minus one to match array's index
 
@@ -232,10 +220,7 @@ export const getAllProduct = async (page) => {
 
       let products;
       const productsQuery = query.orderBy("createdAt");
-      console.log(producstSnapshot.docs.length - 1)
-      console.log(productCursor)
       if (productCursor <= producstSnapshot.docs.length - 1) {
-        console.log("hello")
         products = await productsQuery
           .startAt(productAnchor.data().createdAt)
           .limit(5)
@@ -261,7 +246,6 @@ export const addProduct = async (productDetails) => {
     if (checkExist) {
       throw "Product already exists";
     }
-    console.log(productDetails.imageUrl);
     const productDoc = {
       name: productDetails.name,
       customerType: productDetails.customerType,
@@ -291,7 +275,6 @@ export const addProduct = async (productDetails) => {
 };
 export const uploadImages = async (files) => {
   let urlArray = [];
-  console.log(files);
   // for (const item of files) {
   //   const uploadTask = storage.ref(`/images/${item.name}`).put(item);
   //   uploadTask.on("state_changed", console.log, console.error, async () => {
@@ -311,7 +294,6 @@ export const uploadImages = async (files) => {
   await pForEach(files, async (item) => {
     await storage.ref(`/images/${item.name}`).put(item);
     // uploadTask.on("state_changed", console.log, console.error, async () => {
-    console.log("hello");
     const result = await storage
       .ref("images")
       .child(item.name)
@@ -374,13 +356,41 @@ export const getCart = async (username) => {
   }
 };
 
-export const getAllOrder = async () => {
+export const getAllOrder = async (page) => {
   try {
-    let orderList = [];
-    const query = await firestore.collection(ORDERS).get();
-    query.forEach((item) => {
-      orderList.push(item.data());
-    });
+    // let orderList = [];
+    // const query = await firestore.collection(ORDERS).get();
+    // query.forEach((item) => {
+    //   orderList.push(item.data());
+    // });
+    // return orderList;
+    const LIMIT = 5
+    const orderList = [];
+    let orderCursor = parseInt(page) === 1 ? 0 : (page - 1) * LIMIT; // minus one to match array's index
+    const query = firestore.collection(ORDERS);
+    const ordersSnapshot = await query.orderBy("createdAt").get();
+    if (ordersSnapshot.size > 0) {
+      const ordersAnchor =
+        ordersSnapshot.docs[
+          orderCursor <= ordersSnapshot.docs.length - 1
+            ? orderCursor
+            : ordersSnapshot.docs.length - 1
+        ];
+
+      let orders;
+      const ordersQuery = query.orderBy("createdAt");
+      if (orderCursor <= ordersSnapshot.docs.length - 1) {
+        orders = await ordersQuery
+          .startAt(ordersAnchor.data().createdAt)
+          .limit(5)
+          .get();
+      } else {
+        return orderList;
+      }
+      orders.forEach((item) => {
+        orderList.push(item.data());
+      });
+    }
     return orderList;
   } catch (error) {
     console.log(error);

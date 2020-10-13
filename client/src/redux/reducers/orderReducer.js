@@ -12,6 +12,7 @@ const initialState = {
   orders: [],
   orderReducerStatus: IDLE,
   error: "",
+  loadingOrder: ""
 };
 
 export default function (state = initialState, action) {
@@ -42,6 +43,7 @@ export default function (state = initialState, action) {
         ...state,
         orderReducerStatus: LOADING,
         error: initialState.error,
+        loadingOrder: action.payload
       };
     }
     case MARK_ORDER_STATUS_SUCCESS: {
@@ -49,6 +51,7 @@ export default function (state = initialState, action) {
         ...state,
         orderReducerStatus: SUCCESS,
         error: initialState.error,
+        loadingOrder: initialState.loadingOrder
       };
     }
     case MARK_ORDER_STATUS_ERROR: {
@@ -56,6 +59,7 @@ export default function (state = initialState, action) {
         ...state,
         orderReducerStatus: ERROR,
         error: action.payload,
+        loadingOrder: initialState.loadingOrder
       };
     }
     default:
