@@ -28,6 +28,7 @@ export const getAllProductsByCustomerTypeAndType = async (
   page
 ) => {
   try {
+    console.log("firebase")
     let productList = [];
     let getProductArray = [];
     const filterOptions = Object.keys(filterConditions);
@@ -53,15 +54,16 @@ export const getAllProductsByCustomerTypeAndType = async (
       products.forEach((doc) => {
         getProductArray.push(doc);
       });
+      let categoryIndex = filterOptions.indexOf("category");
+      filterOptions.splice(categoryIndex, 1);
       await pForEach(getProductArray, async (doc) => {
         let variations = firestore
           .collection(PRODUCTS)
           .doc(doc.id)
           .collection(VARIATIONS);
-        let categoryIndex = filterOptions.indexOf("category");
-        filterOptions.splice(categoryIndex, 1);
         filterOptions.forEach((item) => {
           if (filterConditions[item]) {
+            console.log(item)
             variations = variations.where(item, "==", filterConditions[item]);
           }
         });
@@ -254,6 +256,7 @@ export const addProduct = async (productDetails) => {
       createdAt: new Date().toISOString(),
       price: productDetails.price,
       imageUrl: [...productDetails.imageUrl],
+      color: productDetails.colors
     };
     await firestore.doc(`/products/${productDetails.name}`).set(productDoc);
     productDetails.colors.forEach((color) => {

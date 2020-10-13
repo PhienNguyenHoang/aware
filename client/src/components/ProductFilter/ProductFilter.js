@@ -75,16 +75,13 @@ const ProductFilter = ({
   ));
   const colorBoxMarkup = colorList.map((item, index) => (
     <ColorBox
-      key={item}
+      key={index}
       color={item}
       isActive={activeColor === item}
       toggleCss={toggleCssColor}
     />
   ));
-  useEffect(() => {
-    const fetchData = async () => {};
-    fetchData();
-  });
+  console.log(filterConditions)
   return (
     <Fragment>
       <div className="filter">Filter</div>

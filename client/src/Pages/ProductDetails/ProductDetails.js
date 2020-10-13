@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getOneProduct, addProductToCart } from "../../firebase/firebase";
+import { addProductToCart } from "../../firebase/firebase";
 import {
   addItemToCart,
   unAuthAddItemToCart,
@@ -8,12 +8,13 @@ import {
 import minus from "../../Images/minus.png";
 import plus from "../../Images/plus.png";
 import NavBar from "../../components/NavBar/NavBar";
-import SizeBox from "../../components/SizeBox/SizeBox";
 import { sortSize } from "../../util/sortSize";
-import ColorBox from "../../components/ColorBox/ColorBox";
+import ProductColorBox from "../../components/ProductColorBox/ProductColorBox";
 import "./ProductDetails.css";
 import { getSpecificProduct } from "../../redux/actions/productActions";
-import  AdditionalImages  from "../../components/AdditionalImages/AdditionalImages";
+import AdditionalImages from "../../components/AdditionalImages/AdditionalImages";
+import Loader from "../../components/Loader/Loader";
+import ProductSizeBox from "../../components/ProductSizeBox/ProducSizeBox";
 const ProductDetails = ({
   history,
   user: { authenticated, credentials },
@@ -22,12 +23,16 @@ const ProductDetails = ({
   getSpecificProduct,
   productReducer: { product },
 }) => {
-  let productDetails, productPath, sizeBoxMarkUp, colorBoxMarkUp;
+  let productPath,
+    sizeBoxMarkUp,
+    colorBoxMarkUp,
+    imageMarkUp,
+    additionalImageMarkUp;
   const [quantity, setQuantity] = useState(1);
   const [activeSize, setActiveSize] = useState("");
   const [activeColor, setActiveColor] = useState("");
   const [activeImage, setActiveImage] = useState("");
-  const [imageClicked, setClicked] = useState(false)
+  const [imageClicked, setClicked] = useState(false);
   const productURL = history.location.pathname.split("/product/");
   const productName = productURL[1].split("-").join(" ");
   const handleIncrement = () => {
@@ -38,8 +43,8 @@ const ProductDetails = ({
   };
   const handleClickImage = (url) => {
     setActiveImage(url);
-    setClicked(true)
-  }
+    setClicked(true);
+  };
   useEffect(() => {
     getSpecificProduct(productName);
   }, []);
@@ -49,27 +54,46 @@ const ProductDetails = ({
   const toggleCssColor = (clickedItem) => {
     setActiveColor(clickedItem);
   };
-  productPath = `${product.customerType}/ ${product.type}/ ${product.name}`;
-  let sizeArray = product.sizes;
-  let colorArray = product.colors;
-  if (sizeArray && colorArray) {
-    sizeArray = sortSize(sizeArray);
-    sizeBoxMarkUp = sizeArray.map((item, index) => (
-      <SizeBox
-        size={item}
-        key={index}
-        toggleCss={toggleCssSize}
-        isActive={activeSize === item}
-      />
-    ));
-    colorBoxMarkUp = colorArray.map((item, index) => (
-      <ColorBox
-        color={item}
-        key={index}
-        toggleCss={toggleCssColor}
-        isActive={activeColor === item}
-      />
-    ));
+  if (product) {
+    productPath = `${product.customerType}/ ${product.type}/ ${product.name}`;
+    let sizeArray = product.sizes;
+    let colorArray = product.colors;
+    if (sizeArray && colorArray) {
+      sizeArray = sortSize(sizeArray);
+      sizeBoxMarkUp = sizeArray.map((item, index) => (
+        <ProductSizeBox
+          size={item}
+          key={index}
+          toggleCss={toggleCssSize}
+          isActive={activeSize === item}
+        />
+      ));
+
+      colorBoxMarkUp = colorArray.map((item, index) => (
+        <ProductColorBox
+          color={item}
+          key={index}
+          toggleCss={toggleCssColor}
+          isActive={activeColor === item}
+        />
+      ));
+    }
+    imageMarkUp =
+      Object.keys(product).length > 0 && !imageClicked ? (
+        <img src={product.imageUrl[0]} alt="" />
+      ) : (
+        <img src={activeImage} alt="" />
+      );
+    additionalImageMarkUp =
+      Object.keys(product).length > 0
+        ? product.imageUrl.map((item, index) => (
+            <AdditionalImages
+              url={item}
+              key={index}
+              handleClickImage={handleClickImage}
+            />
+          ))
+        : null;
   }
   const handleAddToCart = async () => {
     let productObj = {
@@ -97,14 +121,16 @@ const ProductDetails = ({
       unAuthAddItemToCart(productObj);
     }
   };
-  let imageMarkUp =
-    Object.keys(product).length > 0 && !imageClicked ? (
-      <img src={product.imageUrl[0]} alt="" />
-    ) : <img src={activeImage} alt="" />;
-  let additionalImageMarkUp =
-    Object.keys(product).length > 0
-      ? product.imageUrl.map((item, index) => <AdditionalImages url={item} key={index} handleClickImage={handleClickImage}/>)
-      : null;
+  let productNameMarkup = product ? (
+    <div className="product-details-name">{product.name}</div>
+  ) : (
+    <Loader />
+  );
+  let productPriceMarkup = product ? (
+    <div className="product-details-price">{product.price}$</div>
+  ) : (
+    <Loader />
+  );
   return (
     <div className="product-details-outer-container">
       <NavBar />
@@ -119,8 +145,10 @@ const ProductDetails = ({
             {imageMarkUp}
           </div>
           <div className="col-span-1 customize-product-info">
-            <div className="product-details-name">{product.name}</div>
-            <div className="product-details-price">{product.price}$</div>
+            {/* <div className="product-details-name">{product.name}</div> */}
+            {productNameMarkup}
+            {/* <div className="product-details-price">{product.price}$</div> */}
+            {productPriceMarkup}
             <div className="product-details-title">Size</div>
             <div className="product-details-size-box">{sizeBoxMarkUp}</div>
             <div className="product-details-title">Color</div>

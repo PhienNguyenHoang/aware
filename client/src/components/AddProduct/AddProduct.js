@@ -84,6 +84,11 @@ const AddProduct = () => {
     setColor([]);
     setSize([]);
     setBrand("");
+    setImage1(null);
+    setImage2(null);
+    setImage3(null);
+    setImage4(null);
+    setFile([])
   };
   const handleSubmit = async (event) => {
     event.preventDefault();

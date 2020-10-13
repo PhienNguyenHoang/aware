@@ -1,7 +1,7 @@
 import React from "react";
 import {withRouter} from 'react-router-dom'
 import "./SizeBox.css";
-const SizeBox = ({ size, isActive, toggleCss, location }) => {
+const SizeBox = ({ size, toggleCss, location }) => {
   // const [classCss, setClassCss] = useState('')
   // const handleClick = () => {
   //     if(classCss == 'size-box-container-checked'){
